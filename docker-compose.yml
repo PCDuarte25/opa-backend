@@ -1,0 +1,23 @@
+version: '3.7'
+services:
+  mysql_db:
+    image: mysql:latest
+    environment:
+      - MYSQL_ROOT_PASSWORD=admin
+      - MYSQL_USER=opa-user
+      - MYSQL_PASSWORD=opa-user
+    ports:
+      - 4000:3306
+    volumes:
+      - './db/mysql-data:/var/lib/mysql'
+
+  phpmyadmin:
+    image: phpmyadmin:latest
+    restart: always
+    environment:
+      - PMA_HOST=mysql_db
+      - PMA_PORT=3306
+    ports:
+      - 9090:80
+    depends_on:
+      - mysql_db
