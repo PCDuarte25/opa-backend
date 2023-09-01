@@ -1,2 +1,8 @@
 # opa-backend
-Repositório de back-end do aplicativo Opa!
+
+## Scripts básicos
+
+
+### Docker
+
+* docker-compose up -d (inicia o docker)
