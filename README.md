@@ -6,3 +6,5 @@
 ### Docker
 
 * docker-compose up -d (inicia o docker)
+
+teste
