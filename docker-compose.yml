@@ -3,9 +3,9 @@ services:
   mysql_db:
     image: mysql:latest
     environment:
-      - MYSQL_ROOT_PASSWORD=admin
       - MYSQL_USER=opa-user
       - MYSQL_PASSWORD=opa-user
+      - MYSQL_ROOT_PASSWORD=admin
     ports:
       - 4000:3306
     volumes:
