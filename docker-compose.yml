@@ -9,7 +9,8 @@ services:
     ports:
       - 3000:3000
     depends_on:
-      - mysql_db
+      mysql_db:
+        condition: service_healthy
     networks:
       - opa_network
 
@@ -26,6 +27,12 @@ services:
       - './db/mysql-data:/var/lib/mysql'
     networks:
       - opa_network
+    healthcheck:
+      test: mysqladmin ping -h 127.0.0.1 -u $MYSQL_USER --password=$MYSQL_PASSWORD
+      start_period: 5s
+      interval: 5s
+      timeout: 5s
+      retries: 5
 
   phpmyadmin:
     image: phpmyadmin:latest
@@ -36,7 +43,8 @@ services:
     ports:
       - 9090:80
     depends_on:
-      - mysql_db
+      mysql_db:
+        condition: service_healthy
     networks:
       - opa_network
 
