@@ -1,11 +1,11 @@
 version: '3.7'
 services:
   opa_api_backend:
-    image: node:18-alpine
+    build:
+      context: .
     volumes:
       - '.:/app'
-    working_dir: /app
-    command: sh -c "npm install && npm run start:dev"
+    entrypoint: ./.docker/opa_init_script.sh
     ports:
       - 3000:3000
     depends_on:
