@@ -6,6 +6,12 @@
 * Possivelmente em caso de problemas de permissão dar permissões de leitura/escrita para a db usando o comando
   `sudo chown -R <nome_usuario> /db/`
 
+## Para windows
+* Instala o Ubuntu no WSL2.
+* Define ele como padrão e abre o Ubuntu em si no WSL
+* Da um git clone no repositório no WSL (para acessar o caminho no windows é `/mnt/c/...`)
+* Roda o `code .` dentro do WSL, instala a extensão do WSL no VsCode
+
 ## Execução do ambiente
 
 * Rode o comando `docker-compose up -d` (o `-d` serve para deixar o terminal livre)
@@ -53,7 +59,6 @@
 - 10. Crie o pull request e mande para alguem revisar, após aprovado o github vai liberar para ser mergeado com a master.
 
 
-                         TMJ
 ⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⢀⣀⣤⣄⡀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀
 ⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⣰⣿⠛⠉⠙⠻⣦⡀⠀⠀⠀⠀⠀⠀⠀⠀⠀⣠⣴⣶⣶⣦⣤⡀⠀⠀⠀⠀
 ⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⣿⡇⠀⠀⠀⠀⢻⣇⠀⠀⠀⠀⠀⠀⠀⠀⢠⣿⠁⠀⠀⠈⢻⣷⠀⠀⠀⠀
