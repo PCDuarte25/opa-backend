@@ -44,6 +44,6 @@ export class Person {
     birthDate: string;
 
     @OneToOne(() => User, user => user.person)
-    @JoinColumn({referencedColumnName: "id", name: "user_id"})
+    @JoinColumn({ referencedColumnName: "id", name: "user_id" })
     user: User;
 }
