@@ -7,7 +7,7 @@ export class Person {
     @PrimaryGeneratedColumn()
     id: number;
 
-    @Column({ length: 50})
+    @Column({ length: 50 })
     name: string;
 
     @Column({ length: 1 })
@@ -46,6 +46,6 @@ export class Person {
     @OneToOne(() => User, user => user.person, {
         cascade: true,
     })
-    @JoinColumn({referencedColumnName: "id", name: "user_id"})
+    @JoinColumn({ referencedColumnName: "id", name: "user_id" })
     user: User;
 }
