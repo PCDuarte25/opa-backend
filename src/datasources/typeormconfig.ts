@@ -5,6 +5,8 @@ import { config } from 'dotenv';
 config();
 
 const configService = new ConfigService();
+console.log(__dirname + '/../**/entities/.entity{.ts,.js}',)
+
 export default new DataSource({
     type: 'mysql',
     host: process.env.DB_HOST,
@@ -14,7 +16,9 @@ export default new DataSource({
     database: process.env.PMA_HOST,
     entities: [
         "dist/database_config/**/entity/*.entity{.ts,.js}",
-        "src/database_config/**/entity/*.entity{.ts,.js}"
+        "src/database_config/**/entity/*.entity{.ts,.js}",
+        "dist/**/entities/*.entity{.ts,.js}",
+        "src/**/entities/*.entity{.ts,.js}"
     ],
     migrations: [
         'src/database_config/migrations/*.ts'

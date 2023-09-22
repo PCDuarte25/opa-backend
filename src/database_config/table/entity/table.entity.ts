@@ -1,6 +1,6 @@
 
-import { User } from 'src/database_config/user/entity/user.entity';
 import { Entity, Column, PrimaryGeneratedColumn, OneToOne, JoinColumn, OneToMany } from 'typeorm';
+import { User } from '../../../user/entities/user.entity';
 
 @Entity()
 export class Table {
