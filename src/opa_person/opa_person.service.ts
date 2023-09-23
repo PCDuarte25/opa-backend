@@ -9,10 +9,9 @@ export class OpaPersonService {
 
   constructor(
     private opaPersonRepository: OpaPersonRepository
-  ) {}
+  ) { }
 
   create(createOpaPersonDto: CreateOpaPersonDto) {
-    // #TODO: Implementar validação de senha.
 
     const person: PersonCreateContract = {
       name: createOpaPersonDto.name,
@@ -23,10 +22,17 @@ export class OpaPersonService {
         email: createOpaPersonDto.email,
         username: createOpaPersonDto.username,
         password: createOpaPersonDto.password,
-      }
+      },
+      birthDate: createOpaPersonDto.birthDate,
+      cep: createOpaPersonDto.cep,
+      city: createOpaPersonDto.city,
+      complement: createOpaPersonDto.complement,
+      neighborhood: createOpaPersonDto.neighborhood,
+      state: createOpaPersonDto.state,
+      street: createOpaPersonDto.street,
+      streetNumber: createOpaPersonDto.streetNumber,
     }
-
-    return this.opaPersonRepository.create(person);
+    return this.opaPersonRepository.create(person)
   }
 
   findAll() {

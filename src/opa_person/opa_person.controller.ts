@@ -2,13 +2,24 @@ import { Controller, Get, Post, Body, Patch, Param, Delete } from '@nestjs/commo
 import { OpaPersonService } from './opa_person.service';
 import { CreateOpaPersonDto } from './dto/create-opa_person.dto';
 import { UpdateOpaPersonDto } from './dto/update-opa_person.dto';
+import { ValidationException } from '../utils/exceptions';
+import { CepInvalidoMessage, CpfInvalidoMessage } from '../messages/exceptions.messages';
 
 @Controller('opa-person')
 export class OpaPersonController {
-  constructor(private readonly opaPersonService: OpaPersonService) {}
+  constructor(private readonly opaPersonService: OpaPersonService) { }
 
   @Post()
   create(@Body() createOpaPersonDto: CreateOpaPersonDto) {
+
+    if (!cpfValido(createOpaPersonDto.cpf)) {
+      throw new ValidationException(CpfInvalidoMessage)
+    }
+
+    if (!cepValido(createOpaPersonDto.cep)) {
+      throw new ValidationException(CepInvalidoMessage)
+    }
+
     return this.opaPersonService.create(createOpaPersonDto);
   }
 

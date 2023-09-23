@@ -7,4 +7,12 @@ export class CreateOpaPersonDto {
   gender!: string;
   cpf!: string;
   phoneNumber!: string;
+  street!: string;
+  neighborhood!: string;
+  streetNumber!: string;
+  complement!: string;
+  city!: string;
+  state!: string;
+  cep!: string;
+  birthDate!: string;
 }

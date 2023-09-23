@@ -1,11 +1,11 @@
 
-import { User } from 'src/database_config/user/entity/user.entity';
 import { Entity, Column, PrimaryGeneratedColumn, OneToOne, JoinColumn } from 'typeorm';
+import { User } from '../../user/entity/user.entity';
 
 @Entity()
 export class Person {
     @PrimaryGeneratedColumn()
-    id: number;
+    id?: number;
 
     @Column({ length: 50 })
     name: string;
@@ -45,5 +45,5 @@ export class Person {
 
     @OneToOne(() => User, user => user.person)
     @JoinColumn({ referencedColumnName: "id", name: "user_id" })
-    user: User;
+    user?: User;
 }
