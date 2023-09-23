@@ -5,12 +5,12 @@ import { UpdateOpaPersonDto } from './dtos/update-opa_person.dto';
 
 @Controller('opa-person')
 export class OpaPersonController {
-  constructor(private readonly opaPersonService: OpaPersonService) {}
+  constructor(private readonly opaPersonService: OpaPersonService) { }
 
   @Post()
   @HttpCode(HttpStatus.CREATED)
   async create(@Body() createOpaPersonDto: CreateOpaPersonDto, @Response() res) {
-    try{
+    try {
       const person = await this.opaPersonService.create(createOpaPersonDto);
       return res.json({
         message: 'Usuário criado com sucesso!',
@@ -22,27 +22,26 @@ export class OpaPersonController {
         message: e.message,
       });
     }
+
+    @Get()
+    findAll(@Response() res) {
+      return res.json({
+        message: 'Hello World!'
+      });
+    }
+
+    // @Get(':id')
+    // findOne(@Param('id') id: string) {
+    //   return this.opaPersonService.findOne(+id);
+    // }
+
+    // @Patch(':id')
+    // update(@Param('id') id: string, @Body() updateOpaPersonDto: UpdateOpaPersonDto) {
+    //   return this.opaPersonService.update(+id, updateOpaPersonDto);
+    // }
+
+    // @Delete(':id')
+    // remove(@Param('id') id: string) {
+    //   return this.opaPersonService.remove(+id);
+    // }
   }
-
-  @Get()
-  findAll(@Response() res) {
-    return res.json({
-      message: 'Hello World!'
-    });
-  }
-
-  // @Get(':id')
-  // findOne(@Param('id') id: string) {
-  //   return this.opaPersonService.findOne(+id);
-  // }
-
-  // @Patch(':id')
-  // update(@Param('id') id: string, @Body() updateOpaPersonDto: UpdateOpaPersonDto) {
-  //   return this.opaPersonService.update(+id, updateOpaPersonDto);
-  // }
-
-  // @Delete(':id')
-  // remove(@Param('id') id: string) {
-  //   return this.opaPersonService.remove(+id);
-  // }
-}

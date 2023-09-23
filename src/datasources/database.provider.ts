@@ -12,7 +12,8 @@ export const databaseProviders = [
                 password: process.env.MYSQL_ROOT_PASSWORD,
                 database: process.env.PMA_HOST,
                 entities: [
-                    __dirname + '/../database_config/**/entity/*.entity{.ts,.js}',
+                    __dirname + '/../**/entities/.entity{.ts,.js}',
+                    __dirname + '/../database_config/**/entity/.entity{.ts,.js}',
                 ],
                 synchronize: true,
                 logging: true,

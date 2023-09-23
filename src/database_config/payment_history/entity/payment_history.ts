@@ -11,7 +11,7 @@ export class PaymentHistory {
     @CreateDateColumn()
     date: string;
 
-    @Column({ nullable: false, type: "float64" })
+    @Column({ nullable: false, type: "decimal" })
     tax: number;
 }
 

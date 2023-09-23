@@ -21,7 +21,6 @@ export class OpaPersonService {
     if (await this.opaPersonRepository.findOne({ where: { cpf: createOpaPersonDto.cpf } })) {
       throw new Error('Já existe um usuário com este CPF.');
     }
-
     if (await this.opaPersonRepository.findOne({
       where: {
         user: {
@@ -52,6 +51,7 @@ export class OpaPersonService {
       user: {
         email: createOpaPersonDto.email,
         username: createOpaPersonDto.username,
+<<<<<<< HEAD
         password: hashedPassword,
       }
     }
@@ -70,6 +70,20 @@ export class OpaPersonService {
     }
 
     return personOutputDto;
+=======
+        password: createOpaPersonDto.password,
+      },
+      birthDate: createOpaPersonDto.birthDate,
+      cep: createOpaPersonDto.cep,
+      city: createOpaPersonDto.city,
+      complement: createOpaPersonDto.complement,
+      neighborhood: createOpaPersonDto.neighborhood,
+      state: createOpaPersonDto.state,
+      street: createOpaPersonDto.street,
+      streetNumber: createOpaPersonDto.streetNumber,
+    }
+    return this.opaPersonRepository.create(person)
+>>>>>>> 7f2f43d (feat/corrigido endpoint de user person)
   }
 
   async findByUsername(username: string): Promise<Person> {
