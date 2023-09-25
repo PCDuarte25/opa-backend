@@ -4,4 +4,4 @@ npm install
 
 npm run typeorm migration:run
 
-npm run start:dev
+npm run start:debug
