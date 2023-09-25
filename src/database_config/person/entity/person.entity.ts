@@ -1,10 +1,6 @@
 
-<<<<<<< HEAD
 import { User } from '../../user/entity/user.entity';
-=======
->>>>>>> 7f2f43d (feat/corrigido endpoint de user person)
 import { Entity, Column, PrimaryGeneratedColumn, OneToOne, JoinColumn } from 'typeorm';
-import { User } from '../../user/entity/user.entity';
 
 @Entity()
 export class Person {

@@ -1,6 +1,5 @@
 version: '3.7'
 services:
-<<<<<<< HEAD
   opa_api_backend:
     build:
       context: .
@@ -16,8 +15,6 @@ services:
     networks:
       - opa_network
 
-=======
->>>>>>> 7f2f43d (feat/corrigido endpoint de user person)
   mysql_db:
     image: mysql:latest
     environment:
