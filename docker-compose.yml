@@ -8,6 +8,7 @@ services:
     entrypoint: ./.docker/opa_init_script.sh
     ports:
       - 3000:3000
+      - 9229:9229
     depends_on:
       mysql_db:
         condition: service_healthy

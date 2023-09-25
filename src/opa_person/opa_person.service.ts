@@ -1,20 +1,50 @@
-import { Injectable } from '@nestjs/common';
-import { CreateOpaPersonDto } from './dto/create-opa_person.dto';
-import { UpdateOpaPersonDto } from './dto/update-opa_person.dto';
+import { Inject, Injectable } from '@nestjs/common';
+import { Person } from 'src/database_config/person/entity/person.entity';
+import { Repository } from 'typeorm';
+import { CreateOpaPersonDto, CreateOpaPersonOutputDto } from './dtos/create-opa_person.dto';
+import { UpdateOpaPersonDto } from './dtos/update-opa_person.dto';
 import { PersonCreateContract } from './opa_person.contracts';
-import { OpaPersonRepository } from './repositories/opa_person.repository';
+import { EncrypterService } from 'src/shared/services/encrypter/encrypter.service';
+import { User } from 'src/database_config/user/entity/user.entity';
 
 @Injectable()
 export class OpaPersonService {
 
   constructor(
-    private opaPersonRepository: OpaPersonRepository
-  ) {}
+    @Inject('PERSON_REPOSITORY')
+    private opaPersonRepository: Repository<Person>,
+    @Inject('ENCRYPTER_SERVICE')
+    private encrypterService: EncrypterService,
+  ) { }
 
-  create(createOpaPersonDto: CreateOpaPersonDto) {
-    // #TODO: Implementar validação de senha.
+  async create(createOpaPersonDto: CreateOpaPersonDto): Promise<CreateOpaPersonOutputDto> {
+    if (await this.opaPersonRepository.findOne({ where: { cpf: createOpaPersonDto.cpf } })) {
+      throw new Error('Já existe um usuário com este CPF.');
+    }
 
-    const person: PersonCreateContract = {
+    if (await this.opaPersonRepository.findOne({
+      where: {
+        user: {
+          email: createOpaPersonDto.email,
+        }
+      }, relations: ['user']
+    })) {
+      throw new Error('Já existe um usuário com este e-mail.');
+    }
+
+    if (await this.opaPersonRepository.findOne({
+      where: {
+        user: {
+          username: createOpaPersonDto.username,
+        }
+      }, relations: ['user']
+    })) {
+      throw new Error('Já existe um usuário com este usuário.');
+    }
+
+    const hashedPassword = await this.encrypterService.encrypt(createOpaPersonDto.password);
+
+    const personCreate: PersonCreateContract = {
       name: createOpaPersonDto.name,
       gender: createOpaPersonDto.gender,
       cpf: createOpaPersonDto.cpf,
@@ -22,26 +52,51 @@ export class OpaPersonService {
       user: {
         email: createOpaPersonDto.email,
         username: createOpaPersonDto.username,
-        password: createOpaPersonDto.password,
+        password: hashedPassword,
       }
     }
 
-    return this.opaPersonRepository.create(person);
+    const person = this.opaPersonRepository.create(personCreate);
+    await this.opaPersonRepository.save(person);
+
+    const personOutputDto: CreateOpaPersonOutputDto = {
+      id: person.id,
+      name: person.name,
+      cpf: person.cpf,
+      user: {
+        email: person.user.email,
+        username: person.user.username,
+      }
+    }
+
+    return personOutputDto;
   }
 
-  findAll() {
-    return `This action returns all opaPerson`;
+  async findByUsername(username: string): Promise<Person> {
+    const person = await this.opaPersonRepository.findOne({
+      where: {
+        user: {
+          username: username,
+        }
+      }, relations: ['user']
+    });
+
+    return person ?? null;
   }
 
-  findOne(id: number) {
-    return `This action returns a #${id} opaPerson`;
-  }
+  // findAll() {
+  //   return `This action returns all opaPerson`;
+  // }
 
-  update(id: number, updateOpaPersonDto: UpdateOpaPersonDto) {
-    return `This action updates a #${id} opaPerson`;
-  }
+  // findOne(id: number) {
+  //   return `This action returns a #${id} opaPerson`;
+  // }
 
-  remove(id: number) {
-    return `This action removes a #${id} opaPerson`;
-  }
+  // update(id: number, updateOpaPersonDto: UpdateOpaPersonDto) {
+  //   return `This action updates a #${id} opaPerson`;
+  // }
+
+  // remove(id: number) {
+  //   return `This action removes a #${id} opaPerson`;
+  // }
 }
