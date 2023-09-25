@@ -24,6 +24,30 @@ services:
       - MYSQL_DATABASE=opa_web
     ports:
       - 4000:3306
+    volumes:
+      - './db/mysql-data:/var/lib/mysql'
+    networks:
+      - opa_network
+    healthcheck:
+      test: mysqladmin ping -h 127.0.0.1 -u $MYSQL_USER --password=$MYSQL_PASSWORD
+      start_period: 5s
+      interval: 5s
+      timeout: 5s
+      retries: 5
+
+  phpmyadmin:
+    image: phpmyadmin:latest
+    restart: always
+    environment:
+      - PMA_HOST=mysql_db
+      - PMA_PORT=3306
+    ports:
+      - 9090:80
+    depends_on:
+      mysql_db:
+        condition: service_healthy
+    networks:
+      - opa_network
 
 networks:
   opa_network:
