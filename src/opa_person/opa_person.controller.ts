@@ -22,26 +22,27 @@ export class OpaPersonController {
         message: e.message,
       });
     }
-
-    @Get()
-    findAll(@Response() res) {
-      return res.json({
-        message: 'Hello World!'
-      });
-    }
-
-    // @Get(':id')
-    // findOne(@Param('id') id: string) {
-    //   return this.opaPersonService.findOne(+id);
-    // }
-
-    // @Patch(':id')
-    // update(@Param('id') id: string, @Body() updateOpaPersonDto: UpdateOpaPersonDto) {
-    //   return this.opaPersonService.update(+id, updateOpaPersonDto);
-    // }
-
-    // @Delete(':id')
-    // remove(@Param('id') id: string) {
-    //   return this.opaPersonService.remove(+id);
-    // }
   }
+
+  @Get()
+  findAll(@Response() res) {
+    return res.json({
+      message: 'Hello World!'
+    });
+  }
+
+  // @Get(':id')
+  // findOne(@Param('id') id: string) {
+  //   return this.opaPersonService.findOne(+id);
+  // }
+
+  // @Patch(':id')
+  // update(@Param('id') id: string, @Body() updateOpaPersonDto: UpdateOpaPersonDto) {
+  //   return this.opaPersonService.update(+id, updateOpaPersonDto);
+  // }
+
+  // @Delete(':id')
+  // remove(@Param('id') id: string) {
+  //   return this.opaPersonService.remove(+id);
+  // }
+}

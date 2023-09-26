@@ -15,7 +15,7 @@ import { StockModule } from './stock/stock.module';
     OpaPersonModule,
     EncrypterModule,
     AuthModule,
-    StockModule
+    StockModule,
   ],
   controllers: [AppController],
   providers: [AppService],
