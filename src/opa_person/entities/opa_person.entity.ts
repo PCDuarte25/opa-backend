@@ -1,4 +1,4 @@
-import { Column, Entity, ManyToOne, OneToOne, PrimaryGeneratedColumn } from "typeorm";
+import { Column, Entity, ManyToOne, OneToOne, PrimaryGeneratedColumn, Relation } from "typeorm";
 import { Table } from "../../database_config/table/entity/table.entity";
 
 @Entity()
@@ -16,10 +16,10 @@ export class User {
     password: string;
 
     @OneToOne(() => Person, person => person.user)
-    person?: Person;
+    person?: Relation<Person>;
 
     @ManyToOne(() => Table, table => table.users)
-    table?: Table;
+    table?: Relation<Table>;
 }
 
 @Entity()
