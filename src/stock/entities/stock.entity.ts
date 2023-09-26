@@ -1,5 +1,5 @@
-import { Column, Entity, OneToMany, PrimaryGeneratedColumn } from "typeorm";
-import { ProductItem } from "../../database_config/product_items/entity/product_items.entity";
+import { Column, Entity, OneToMany, PrimaryGeneratedColumn, Relation } from "typeorm";
+import { ProductItem } from "../../database_config/productItems/entity/productItems.entity";
 
 enum MeasurementUnit {
     UN = 'UN',

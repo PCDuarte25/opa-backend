@@ -1,6 +1,6 @@
 
 import { Entity, Column, PrimaryGeneratedColumn, OneToMany } from 'typeorm';
-import { ProductItem } from '../../product_items/entity/product_items.entity';
+import { ProductItem } from '../../productItems/entity/productItems.entity';
 
 //tabela de produto final(por ex: file a parmegiana)
 @Entity()
