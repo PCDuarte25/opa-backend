@@ -21,7 +21,6 @@ export class OpaPersonService {
     if (await this.opaPersonRepository.findOne({ where: { cpf: createOpaPersonDto.cpf } })) {
       throw new Error('Já existe um usuário com este CPF.');
     }
-
     if (await this.opaPersonRepository.findOne({
       where: {
         user: {
@@ -49,6 +48,14 @@ export class OpaPersonService {
       gender: createOpaPersonDto.gender,
       cpf: createOpaPersonDto.cpf,
       phoneNumber: createOpaPersonDto.phoneNumber,
+      birthDate: createOpaPersonDto.birthDate,
+      cep: createOpaPersonDto.cep,
+      city: createOpaPersonDto.city,
+      complement: createOpaPersonDto.complement,
+      neighborhood: createOpaPersonDto.neighborhood,
+      state: createOpaPersonDto.state,
+      street: createOpaPersonDto.street,
+      streetNumber: createOpaPersonDto.streetNumber,
       user: {
         email: createOpaPersonDto.email,
         username: createOpaPersonDto.username,

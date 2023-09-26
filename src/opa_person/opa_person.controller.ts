@@ -5,12 +5,12 @@ import { UpdateOpaPersonDto } from './dtos/update-opa_person.dto';
 
 @Controller('opa-person')
 export class OpaPersonController {
-  constructor(private readonly opaPersonService: OpaPersonService) {}
+  constructor(private readonly opaPersonService: OpaPersonService) { }
 
   @Post()
   @HttpCode(HttpStatus.CREATED)
   async create(@Body() createOpaPersonDto: CreateOpaPersonDto, @Response() res) {
-    try{
+    try {
       const person = await this.opaPersonService.create(createOpaPersonDto);
       return res.json({
         message: 'Usuário criado com sucesso!',

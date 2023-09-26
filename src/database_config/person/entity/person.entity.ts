@@ -5,9 +5,9 @@ import { Entity, Column, PrimaryGeneratedColumn, OneToOne, JoinColumn } from 'ty
 @Entity()
 export class Person {
     @PrimaryGeneratedColumn()
-    id: number;
+    id?: number;
 
-    @Column({ length: 50})
+    @Column({ length: 50 })
     name: string;
 
     @Column({ length: 1 })
@@ -46,6 +46,6 @@ export class Person {
     @OneToOne(() => User, user => user.person, {
         cascade: true,
     })
-    @JoinColumn({referencedColumnName: "id", name: "user_id"})
-    user: User;
+    @JoinColumn({ referencedColumnName: "id", name: "user_id" })
+    user?: User;
 }

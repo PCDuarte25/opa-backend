@@ -10,4 +10,12 @@ export interface PersonCreateContract {
   cpf: string;
   phoneNumber: string;
   user: UserCreateContract;
+  street: string;
+  neighborhood: string;
+  streetNumber: string;
+  complement: string;
+  city: string;
+  state: string;
+  cep: string;
+  birthDate: string;
 }

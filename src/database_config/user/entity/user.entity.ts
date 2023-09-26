@@ -1,20 +1,24 @@
-import { Person } from "../../person/entity/person.entity"
-import { Column, Entity, OneToOne, PrimaryGeneratedColumn } from "typeorm";
+import { Column, Entity, ManyToOne, OneToOne, PrimaryGeneratedColumn } from "typeorm";
+import { Table } from "../../table/entity/table.entity";
+import { Person } from "../../person/entity/person.entity";
 
 @Entity()
 export class User {
-  @PrimaryGeneratedColumn()
-  id: number;
+    @PrimaryGeneratedColumn()
+    id?: number;
 
-  @Column({ length: 255, unique: true, nullable: false, type: "varchar" })
-  email: string;
+    @Column({ length: 255, unique: true, nullable: false, type: "varchar" })
+    email: string;
 
-  @Column({ length: 255, unique: true, nullable: false, type: "varchar" })
-  username: string;
+    @Column({ length: 255, unique: true, nullable: false, type: "varchar" })
+    username: string;
 
-  @Column({ length: 255, unique: false, nullable: false, type: "varchar" })
-  password: string;
+    @Column({ length: 255, unique: false, nullable: false, type: "varchar" })
+    password: string;
 
-  @OneToOne(() => Person, person => person.user)
-  person: Person;
- }
+    @OneToOne(() => Person, person => person.user)
+    person?: Person;
+
+    @ManyToOne(() => Table, table => table.users)
+    table?: Table;
+}
