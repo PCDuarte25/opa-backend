@@ -1,12 +1,5 @@
 import { Column, Entity, OneToMany, PrimaryGeneratedColumn, Relation } from "typeorm";
-import { ProductItem } from "../../database_config/productItems/entity/productItems.entity";
-
-enum MeasurementUnit {
-    UN = 'UN',
-    G = 'G',
-    KG = 'KG',
-}
-
+import { MeasurementUnit, ProductItem } from "../../database_config/product_item/productItems.entity";
 
 //tabela de cadastro de produto
 @Entity()
@@ -15,15 +8,23 @@ export class Stock {
     id?: number;
 
     @Column({ length: 100, unique: true, nullable: false, type: "varchar" })
+    productCode: string;
+
+    @Column({ length: 100, unique: true, nullable: false, type: "varchar" })
     productDescription: string;
 
     @Column({ nullable: false, type: "decimal" })
     stockQuantity: number;
 
-    @Column({ type: "enum", enum: MeasurementUnit, default: MeasurementUnit.G })
-    measurementUnit: string
+    @Column({ nullable: true })
+    portionQuantity: number;
+
+    @Column({ nullable: true, type: "enum", enum: MeasurementUnit, default: MeasurementUnit.G })
+    portionMeasurementUnit: string;
+
+    @Column({ nullable: true, type: "enum", enum: MeasurementUnit, default: MeasurementUnit.G })
+    measurementUnit: string;
 
     @OneToMany(() => ProductItem, productItem => productItem.stock)
     productItems?: ProductItem[];
 }
-
