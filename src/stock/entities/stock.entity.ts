@@ -1,12 +1,11 @@
 import { Column, Entity, OneToMany, PrimaryGeneratedColumn, Relation } from "typeorm";
 import { ProductItem } from "../../database_config/productItems/entity/productItems.entity";
 
-enum MeasurementUnit {
+export enum MeasurementUnit {
     UN = 'UN',
     G = 'G',
     KG = 'KG',
 }
-
 
 //tabela de cadastro de produto
 @Entity()

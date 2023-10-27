@@ -15,5 +15,6 @@ import { Stock } from './entities/stock.entity';
       useFactory: (dataSource: DataSource) => dataSource.getRepository(Stock),
       inject: ['DATA_SOURCE'],
     }],
+  exports: [StockService]
 })
 export class StockModule { }
