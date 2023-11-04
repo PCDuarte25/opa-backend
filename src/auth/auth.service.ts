@@ -7,26 +7,27 @@ import { JwtService } from '@nestjs/jwt';
 @Injectable()
 export class AuthService {
 
-  constructor(@Inject('PERSON_SERVICE') private personService: OpaPersonService,
-  @Inject('ENCRYPTER_SERVICE') private encrypter: EncrypterService,
-  private jwtService: JwtService) { }
+  constructor(
+    @Inject('PERSON_SERVICE') private personService: OpaPersonService,
+    @Inject('ENCRYPTER_SERVICE') private encrypter: EncrypterService,
+    private jwtService: JwtService) { }
 
   async login({ username, password }: LoginDto): Promise<LoginOutputDto> {
-      const person = await this.personService.findByUsername(username);
-      const user = person?.user;
+    const person = await this.personService.findByUsername(username);
+    const user = person?.user;
 
-      const isValidLogin = user ? await this.encrypter.compare(password, user.password) : false;
+    const isValidLogin = user ? await this.encrypter.compare(password, user.password) : false;
 
-      if (!isValidLogin) {
-        throw new UnauthorizedException('Usuário e/ou senha inválidos.');
-      }
+    if (!isValidLogin) {
+      throw new UnauthorizedException('Usuário e/ou senha inválidos.');
+    }
 
-      const jwtToken = await this.jwtService.signAsync({
-        user: user.id,
-        name: person.name,
-      });
+    const jwtToken = await this.jwtService.signAsync({
+      user: user.id,
+      name: person.name,
+    });
 
-      return { token: jwtToken };
+    return { token: jwtToken };
   }
 
 }

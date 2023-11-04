@@ -1,5 +1,5 @@
 import { Column, Entity, ManyToOne, OneToOne, PrimaryGeneratedColumn, Relation } from "typeorm";
-import { Table } from "../../database_config/table/entity/table.entity";
+import { Table } from "../../table/entities/table.entity";
 
 @Entity()
 export class User {
