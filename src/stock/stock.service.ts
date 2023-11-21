@@ -4,6 +4,8 @@ import { UpdateStockDto } from './dto/update-stock.dto';
 import { InjectRepository } from '@nestjs/typeorm';
 import { Repository } from 'typeorm';
 import { Stock } from './entities/stock.entity';
+import { ValidationException } from '../utils/exceptions';
+import { ProdutoExistente } from '../messages/exceptions.messages';
 
 @Injectable()
 export class StockService {
@@ -12,17 +14,26 @@ export class StockService {
     private stockRepository: Repository<Stock>,
   ) { }
 
-  async create(createStockDto: CreateStockDto): Promise<Stock | null> {
+  async create(createStockDto: CreateStockDto[]): Promise<Stock[] | null> {
+    var stockEntities: CreateStockDto[]
 
-    const stock: Stock = {
-      measurementUnit: createStockDto.measurementUnit,
-      productDescription: createStockDto.productDescription,
-      stockQuantity: createStockDto.stockQuantity
+    for (var stockDto of createStockDto) {
+      const stockExists = await this.findOneByDescription(stockDto.productDescription)
+      if (stockExists) {
+        throw new ValidationException(ProdutoExistente)
+      }
+
+      const stock: Stock = {
+        measurementUnit: stockDto.measurementUnit,
+        productDescription: stockDto.productDescription,
+        stockQuantity: stockDto.stockQuantity
+      }
+
+      const stockEntity = this.stockRepository.create(stock)
+      stockEntities.push(stockEntity)
     }
 
-    const stockEntity = this.stockRepository.create(stock)
-
-    return await this.stockRepository.save(stockEntity);
+    return await this.stockRepository.save(stockEntities);
   }
 
   async findOne(id: number): Promise<Stock | null> {

@@ -12,13 +12,7 @@ export class StockController {
   constructor(private readonly stockService: StockService) { }
 
   @Post()
-  async create(@Body() createStockDto: CreateStockDto) {
-
-    const stock = await this.stockService.findOneByDescription(createStockDto.productDescription)
-    if (stock) {
-      throw new ValidationException(ProdutoExistente)
-    }
-
+  async create(@Body() createStockDto: CreateStockDto[]) {
     return await this.stockService.create(createStockDto);
   }
 
