@@ -1,6 +1,7 @@
 
-import { Entity, Column, PrimaryGeneratedColumn, OneToMany } from 'typeorm';
+import { Entity, Column, PrimaryGeneratedColumn, OneToMany, OneToOne } from 'typeorm';
 import { User } from '../../database_config/user/entity/user.entity';
+import { Bill } from '../../database_config/bill/entity/bill.entity';
 
 @Entity()
 export class Table {
@@ -12,4 +13,7 @@ export class Table {
 
     @OneToMany(() => User, user => user.table)
     users: User[];
+
+    @OneToOne(() => Bill, bill => bill.table)
+    bill: Bill;
 }

@@ -19,35 +19,35 @@ export class ProductService {
   ) {
   }
 
-  async create(createProductDto: CreateProductDto) {
+  async create(createProductsDto: CreateProductDto[]) {
+    for (const createProductDto of createProductsDto) {
+      if (!createProductDto.productName) {
+        throw new ValidationException(ProdutoNomeInvalido)
+      }
+      if (createProductDto.productPrice <= 0) {
+        throw new ValidationException(ProdutoPrecoInvalido)
+      }
 
-    if (!createProductDto.productName) {
-      throw new ValidationException(ProdutoNomeInvalido)
-    }
-    if (createProductDto.productPrice <= 0) {
-      throw new ValidationException(ProdutoPrecoInvalido)
-    }
+      if (createProductDto.productItems.length == 0) {
+        throw new ValidationException(ProdutoIngredientesInvalidos)
+      }
 
-    if (createProductDto.productItems.length == 0) {
-      throw new ValidationException(ProdutoIngredientesInvalidos)
-    }
+      const product = this.productRepository.findOneBy({ name: createProductDto.productName })
+      if (product) {
+        throw new ValidationException(ProdutoNomeJaExistente)
+      }
 
-    const product = this.productRepository.findOneBy({ name: createProductDto.productName })
-    if (product) {
-      throw new ValidationException(ProdutoNomeJaExistente)
+      const productItemEntities: ProductItem[] = []
+      const productEntity = this.productRepository.create({ name: createProductDto.productName, price: createProductDto.productPrice })
+      const productCreated = await this.productRepository.save(productEntity)
+      for await (const productItem of createProductDto.productItems) {
+        const stockProduct = await this.stockService.findOne(productItem.stockProductId)
+        const productItemEntity = this.productItemsRepository.create({ product: productCreated, quantity: productItem.quantity, stock: stockProduct, isPortion: productItem.isPortion, measurementUnit: productItem.measurementUnit })
+        productItemEntities.push(productItemEntity)
+      }
+      await this.productItemsRepository.save(productItemEntities)
     }
-
-    const productItemEntities: ProductItem[] = []
-    const productEntity = this.productRepository.create({ name: createProductDto.productName, price: createProductDto.productPrice })
-    const productCreated = await this.productRepository.save(productEntity)
-    for await (const productItem of createProductDto.productItems) {
-      const stockProduct = await this.stockService.findOne(productItem.stockProductId)
-      const productItemEntity = this.productItemsRepository.create({ product: productCreated, quantity: productItem.quantity, stock: stockProduct, isPortion: productItem.isPortion, measurementUnit: productItem.measurementUnit })
-      productItemEntities.push(productItemEntity)
-    }
-    await this.productItemsRepository.save(productItemEntities)
-
-    return productCreated;
+    return null;
   }
 
   findAll() {

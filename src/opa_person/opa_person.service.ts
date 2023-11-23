@@ -1,11 +1,9 @@
 import { Inject, Injectable } from '@nestjs/common';
-import { Person } from 'src/database_config/person/entity/person.entity';
 import { Repository } from 'typeorm';
 import { CreateOpaPersonDto, CreateOpaPersonOutputDto } from './dtos/create-opa_person.dto';
-import { UpdateOpaPersonDto } from './dtos/update-opa_person.dto';
 import { PersonCreateContract } from './opa_person.contracts';
 import { EncrypterService } from 'src/shared/services/encrypter/encrypter.service';
-import { User } from 'src/database_config/user/entity/user.entity';
+import { Person } from './entities/opa_person.entity';
 
 @Injectable()
 export class OpaPersonService {

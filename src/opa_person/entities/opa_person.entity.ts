@@ -1,5 +1,6 @@
-import { Column, Entity, ManyToOne, OneToOne, PrimaryGeneratedColumn, Relation } from "typeorm";
+import { Column, Entity, ManyToOne, OneToMany, OneToOne, PrimaryGeneratedColumn, Relation } from "typeorm";
 import { Table } from "../../table/entities/table.entity";
+import { Order } from "../../order/entities/order.entity";
 
 @Entity()
 export class User {
@@ -20,6 +21,9 @@ export class User {
 
     @ManyToOne(() => Table, table => table.users)
     table?: Relation<Table>;
+
+    @OneToMany(() => Order, order => order.responsible)
+    orders: Order[];
 }
 
 @Entity()
