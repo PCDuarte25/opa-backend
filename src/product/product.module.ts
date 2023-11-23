@@ -21,6 +21,7 @@ import { Product } from './entities/product.entity';
       inject: ['DATA_SOURCE'],
     },
   ],
-  imports: [StockModule, DatabaseModule]
+  imports: [StockModule, DatabaseModule],
+  exports: [ProductService],
 })
 export class ProductModule { }

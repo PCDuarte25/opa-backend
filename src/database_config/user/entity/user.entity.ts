@@ -1,7 +1,7 @@
 import { Column, Entity, ManyToOne, OneToOne, PrimaryGeneratedColumn } from "typeorm";
 import { Table } from "../../../table/entities/table.entity";
 import { Person } from "../../../opa_person/entities/opa_person.entity";
-import { Bill } from "../../bill/entity/bill.entity";
+import { Bill } from "../../../bill/entities/bill.entity";
 
 @Entity()
 export class User {

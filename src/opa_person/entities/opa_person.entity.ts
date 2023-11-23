@@ -22,14 +22,12 @@ export class User {
     @ManyToOne(() => Table, table => table.users)
     table?: Relation<Table>;
 
-    @OneToMany(() => Order, order => order.responsible)
-    orders: Order[];
 }
 
 @Entity()
 export class Person {
     @PrimaryGeneratedColumn()
-    id: number;
+    id?: number;
 
     @Column({ length: 50 })
     name: string;
@@ -68,5 +66,8 @@ export class Person {
     birthDate: string;
 
     @OneToOne(() => User, user => user.person)
-    user: User;
+    user?: User;
+
+    @OneToMany(() => Order, order => order.responsible)
+    orders?: Order[];
 }

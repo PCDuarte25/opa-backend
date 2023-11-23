@@ -21,6 +21,7 @@ export class ProductService {
 
   async create(createProductsDto: CreateProductDto[]) {
     for (const createProductDto of createProductsDto) {
+      console.log(createProductDto)
       if (!createProductDto.productName) {
         throw new ValidationException(ProdutoNomeInvalido)
       }
@@ -32,7 +33,7 @@ export class ProductService {
         throw new ValidationException(ProdutoIngredientesInvalidos)
       }
 
-      const product = this.productRepository.findOneBy({ name: createProductDto.productName })
+      const product = await this.productRepository.findOneBy({ name: createProductDto.productName })
       if (product) {
         throw new ValidationException(ProdutoNomeJaExistente)
       }

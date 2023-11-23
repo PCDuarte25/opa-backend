@@ -1,7 +1,7 @@
 import { Entity, PrimaryGeneratedColumn, Column, ManyToMany, JoinTable, CreateDateColumn, ManyToOne, OneToMany } from 'typeorm';
 import { Product } from '../../product/entities/product.entity';
 import { Table } from '../../table/entities/table.entity';
-import { Bill } from '../../database_config/bill/entity/bill.entity';
+import { Bill } from '../../bill/entities/bill.entity';
 import { Person, User } from '../../opa_person/entities/opa_person.entity';
 import { OrderStatus } from '../dto/create-order.dto';
 
@@ -33,8 +33,8 @@ export class Order {
     @ManyToOne(() => Bill, account => account.orders)
     bill: Bill;
 
-    @ManyToOne(() => User, user => user.orders, { eager: true })
-    responsible: User;
+    @ManyToOne(() => Person, user => user.orders, { eager: true })
+    responsible: Person;
 
     @Column()
     checkouted: boolean;

@@ -1,7 +1,7 @@
 
 import { Entity, Column, PrimaryGeneratedColumn, OneToMany, OneToOne } from 'typeorm';
 import { User } from '../../database_config/user/entity/user.entity';
-import { Bill } from '../../database_config/bill/entity/bill.entity';
+import { Bill } from '../../bill/entities/bill.entity';
 
 @Entity()
 export class Table {

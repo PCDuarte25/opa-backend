@@ -1,8 +1,8 @@
 import { Injectable } from "@nestjs/common";
-import { Person } from "src/database_config/person/entity/person.entity";
 import { Repository } from "typeorm";
 import { PersonCreateContract } from "../opa_person.contracts";
 import { User } from "../../database_config/user/entity/user.entity";
+import { Person } from "../entities/opa_person.entity";
 
 @Injectable()
 export class OpaPersonRepository {

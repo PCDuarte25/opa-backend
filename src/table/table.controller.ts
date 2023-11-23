@@ -15,8 +15,8 @@ export class TableController {
   }
 
   @Get()
-  findAll() {
-    return this.tableService.findAll();
+  async findAll() {
+    return await this.tableService.findAll();
   }
 
   @Get(':id')

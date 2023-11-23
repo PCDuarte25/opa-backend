@@ -26,12 +26,12 @@ export class TableService {
     return await this.tableRepository.save(tableEntity)
   }
 
-  findAll() {
-    return `This action returns all table`;
+  async findAll() {
+    return await this.tableRepository.find();
   }
 
-  findOne(id: number) {
-    return `This action returns a #${id} table`;
+  async findOne(id: number) {
+    return await this.tableRepository.findBy({ id });
   }
 
   update(id: number, updateTableDto: UpdateTableDto) {
