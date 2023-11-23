@@ -35,4 +35,7 @@ export class Order {
 
     @ManyToOne(() => User, user => user.orders, { eager: true })
     responsible: User;
+
+    @Column()
+    checkouted: boolean;
 }

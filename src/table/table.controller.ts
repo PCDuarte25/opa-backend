@@ -10,8 +10,8 @@ export class TableController {
   constructor(private readonly tableService: TableService) { }
 
   @Post()
-  create(@Body() createTableDto: CreateTableDto) {
-    return this.tableService.create(createTableDto);
+  async create(@Body() createTableDto: CreateTableDto) {
+    return await this.tableService.create(createTableDto);
   }
 
   @Get()

@@ -34,9 +34,12 @@ export class OrderService {
     }
 
     const table = await this.tableRepository.findOneBy({ id: createOrderDto.tableId })
-    const bill = await this.billRepository.save(this.billRepository.create({}));
+    if (!table.bill) {
+      const bill = await this.billRepository.save(this.billRepository.create({}));
+      table.bill = bill;
+    }
 
-    const order = this.ordersRepository.create({ people: persons, product: product, status: OrderStatus.EmAndamento, table: table, bill: bill })
+    const order = this.ordersRepository.create({ people: persons, product: product, status: OrderStatus.EmAndamento, table: table })
 
     return await this.ordersRepository.save(order);
   }
