@@ -21,7 +21,6 @@ export class User {
 
     @ManyToOne(() => Table, table => table.users)
     table?: Relation<Table>;
-
 }
 
 @Entity()

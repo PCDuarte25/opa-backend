@@ -88,20 +88,4 @@ export class OpaPersonService {
 
     return person ?? null;
   }
-
-  // findAll() {
-  //   return `This action returns all opaPerson`;
-  // }
-
-  // findOne(id: number) {
-  //   return `This action returns a #${id} opaPerson`;
-  // }
-
-  // update(id: number, updateOpaPersonDto: UpdateOpaPersonDto) {
-  //   return `This action updates a #${id} opaPerson`;
-  // }
-
-  // remove(id: number) {
-  //   return `This action removes a #${id} opaPerson`;
-  // }
 }
