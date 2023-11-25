@@ -5,10 +5,10 @@ import { DataSource } from 'typeorm';
 import { Order } from './entities/order.entity';
 import { ProductModule } from '../product/product.module';
 import { Product } from '../product/entities/product.entity';
-import { Person } from '../opa_person/entities/opa_person.entity';
 import { Table } from '../table/entities/table.entity';
 import { Bill } from '../bill/entities/bill.entity';
 import { DatabaseModule } from '../datasources/database.module';
+import { Person } from '../opa_person/entities/person.entity';
 
 @Module({
   controllers: [OrderController],

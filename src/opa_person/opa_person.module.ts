@@ -5,7 +5,7 @@ import { DataSource } from 'typeorm';
 import { DatabaseModule } from '../datasources/database.module';
 import { EncrypterModule } from 'src/shared/services/encrypter/encrypter.module';
 import { EncrypterService } from 'src/shared/services/encrypter/encrypter.service';
-import { Person } from './entities/opa_person.entity';
+import { Person } from './entities/person.entity';
 
 @Module({
   imports: [DatabaseModule, EncrypterModule],

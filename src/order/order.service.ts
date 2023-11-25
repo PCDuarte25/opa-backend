@@ -4,9 +4,9 @@ import { UpdateOrderDto } from './dto/update-order.dto';
 import { Order } from './entities/order.entity';
 import { Repository } from 'typeorm';
 import { Product } from '../product/entities/product.entity';
-import { Person } from '../opa_person/entities/opa_person.entity';
 import { Table } from '../table/entities/table.entity';
 import { Bill } from '../bill/entities/bill.entity';
+import { Person } from '../opa_person/entities/person.entity';
 
 @Injectable()
 export class OrderService {

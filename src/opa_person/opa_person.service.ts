@@ -3,7 +3,7 @@ import { Repository } from 'typeorm';
 import { CreateOpaPersonDto, CreateOpaPersonOutputDto } from './dtos/create-opa_person.dto';
 import { PersonCreateContract } from './opa_person.contracts';
 import { EncrypterService } from 'src/shared/services/encrypter/encrypter.service';
-import { Person } from './entities/opa_person.entity';
+import { Person } from './entities/person.entity';
 
 @Injectable()
 export class OpaPersonService {
