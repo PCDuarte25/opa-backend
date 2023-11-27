@@ -1,15 +1,15 @@
-import * as bcrypt from 'bcrypt';
+import * as bcrypt from 'bcryptjs';
 
 export class EncrypterService {
-    private SALT = 7;
+  private SALT = 7;
 
-    async encrypt(value: string): Promise<string> {
+  async encrypt(value: string): Promise<string> {
 
-      const hash = await bcrypt.hash(value, this.SALT);
-      return hash;
-    }
+    const hash = await bcrypt.hash(value, this.SALT);
+    return hash;
+  }
 
-    async compare(value: string, hash: string): Promise<boolean> {
-      return await bcrypt.compare(value, hash);
-    }
+  async compare(value: string, hash: string): Promise<boolean> {
+    return await bcrypt.compare(value, hash);
+  }
 }

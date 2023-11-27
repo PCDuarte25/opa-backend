@@ -7,7 +7,6 @@ import { OpaPersonModule } from './opa_person/opa_person.module';
 import { EncrypterModule } from './shared/services/encrypter/encrypter.module';
 import { AuthModule } from './auth/auth.module';
 import { StockModule } from './stock/stock.module';
-import { ProductItemModule } from './product-item/product-item.module';
 import { ProductModule } from './product/product.module';
 import { ProductItemModule } from './product-item/product-item.module';
 import { ProductItemModule } from './product-item/product-item.module';
@@ -20,7 +19,6 @@ import { ProductItemModule } from './product-item/product-item.module';
     EncrypterModule,
     AuthModule,
     StockModule,
-    ProductItemModule,
     ProductModule,
   ],
   controllers: [AppController],
