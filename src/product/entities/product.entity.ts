@@ -1,6 +1,6 @@
 
 import { Entity, Column, PrimaryGeneratedColumn, OneToMany } from 'typeorm';
-import { ProductItem } from '../../product-item/entities/productItems.entity';
+import { ProductItem } from '../../database_config/product_item/productItems.entity';
 
 //tabela de produto final(por ex: file a parmegiana)
 @Entity()
@@ -17,6 +17,6 @@ export class Product {
     @Column({ nullable: false, type: "decimal" })
     price: number;
 
-    @OneToMany(() => ProductItem, productItem => productItem.product)
+    @OneToMany(() => ProductItem, productItem => productItem.product, { cascade: true, eager: true })
     items: ProductItem[];
 }

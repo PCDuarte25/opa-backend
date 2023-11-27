@@ -1,4 +1,4 @@
-import { Controller, Get, Post, Body, Patch, Param, Delete } from '@nestjs/common';
+import { Controller, Get, Post, Body, Patch, Param, Delete, Query } from '@nestjs/common';
 import { StockService } from './stock.service';
 import { CreateStockDto } from './dto/create-stock.dto';
 import { UpdateStockDto } from './dto/update-stock.dto';
@@ -21,7 +21,7 @@ export class StockController {
   }
 
   @Get()
-  async findAll(name: string) {
+  async findAll(@Query('name') name: string) {
     return await this.stockService.findAll(name);
   }
 

@@ -21,7 +21,7 @@ export class ProductItem {
     @ManyToOne(() => Product, product => product.items)
     product: Product;
 
-    @ManyToOne(() => Stock, stock => stock.productItems)
+    @ManyToOne(() => Stock, stock => stock.productItems, { eager: true })
     stock: Stock;
 
     @Column({ type: "enum", enum: MeasurementUnit, default: MeasurementUnit.G })
