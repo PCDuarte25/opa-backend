@@ -12,7 +12,7 @@ export class StockController {
   @Post()
   async create(@Body() createStockDto: CreateStockDto) {
 
-    const stock = await this.stockService.findOneByDescription(createStockDto.productDescription)
+    const stock = await this.stockService.findOneByCode(createStockDto.productCode)
     if (stock) {
       throw new ValidationException(ProdutoExistente)
     }

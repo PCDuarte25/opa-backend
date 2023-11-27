@@ -29,8 +29,8 @@ export class StockService {
     return await this.stockRepository.findOneBy({ id });
   }
 
-  async findOneByDescription(productDescription: string): Promise<Stock | null> {
-    return await this.stockRepository.findOneBy({ productDescription });
+  async findOneByCode(productCode: string): Promise<Stock | null> {
+    return await this.stockRepository.findOneBy({ productCode });
   }
 
   async findAll(name: string): Promise<Stock[]> {
