@@ -5,6 +5,7 @@ import { Repository } from 'typeorm';
 import { Table } from './entities/table.entity';
 import { ValidationException } from '../utils/exceptions';
 import { CodigoMesaJaExistente } from '../messages/exceptions.messages';
+import { AddCustomerDto } from './dto/add-customer.dto';
 
 @Injectable()
 export class TableService {
@@ -28,6 +29,10 @@ export class TableService {
 
   async findAll() {
     return await this.tableRepository.find();
+  }
+
+  async addCustomer(addCustomerDto: AddCustomerDto) {
+
   }
 
   async findOne(id: number) {

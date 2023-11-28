@@ -2,7 +2,7 @@ import { Entity, PrimaryGeneratedColumn, Column, ManyToMany, JoinTable, CreateDa
 import { Product } from '../../product/entities/product.entity';
 import { Table } from '../../table/entities/table.entity';
 import { Bill } from '../../bill/entities/bill.entity';
-import { User } from '../../opa_person/entities/opa_person.entity';
+import { User } from '../../opa_person/entities/user.entity';
 import { Person } from '../../opa_person/entities/person.entity';
 import { OrderStatus } from '../dto/create-order.dto';
 

@@ -1,7 +1,13 @@
-import { Column, Entity, ManyToOne, OneToMany, OneToOne, PrimaryGeneratedColumn } from "typeorm";
-import { User } from "./opa_person.entity";
+import { Column, Entity, ManyToOne, OneToMany, OneToOne, PrimaryGeneratedColumn, Relation } from "typeorm";
+import { User } from "./user.entity";
 import { Order } from "../../order/entities/order.entity";
 import { Table } from "../../table/entities/table.entity";
+
+export enum OccupationEnum {
+    Customer = 1,
+    Waiter = 2,
+    Adm = 3,
+}
 
 @Entity()
 export class Person {
@@ -44,7 +50,10 @@ export class Person {
     @Column({ type: 'date' })
     birthDate: string;
 
-    @OneToOne(() => User, user => user.person)
+    @Column({ type: 'enum', enum: OccupationEnum })
+    ocuppation: number;
+
+    @OneToOne(() => User, user => user.person, { eager: true })
     user?: User;
 
     @OneToMany(() => Order, order => order.responsible)
@@ -52,5 +61,8 @@ export class Person {
 
     @ManyToOne(() => Table, table => table.persons)
     table?: Table;
+
+    @OneToMany(() => Table, table => table.persons, { nullable: true })
+    waiterTables?: Table[];
     // table tava em user e deve estar em person pq user eh exclusivo so pra login
 }

@@ -1,7 +1,7 @@
 
-import { Entity, Column, PrimaryGeneratedColumn, OneToMany, OneToOne } from 'typeorm';
+import { Entity, Column, PrimaryGeneratedColumn, OneToMany, OneToOne, ManyToOne, CreateDateColumn } from 'typeorm';
 import { Bill } from '../../bill/entities/bill.entity';
-import { User } from '../../opa_person/entities/opa_person.entity';
+import { User } from '../../opa_person/entities/user.entity';
 import { Person } from '../../opa_person/entities/person.entity';
 
 @Entity()
@@ -15,6 +15,15 @@ export class Table {
     @OneToMany(() => Person, person => person.table)
     persons: Person[];
 
-    @OneToOne(() => Bill, bill => bill.table)
+    @OneToOne(() => Bill, bill => bill.table, { eager: true })
     bill: Bill;
+
+    @ManyToOne(() => Person, person => person.table)
+    waiter: Person;
+
+    @CreateDateColumn()
+    openedAt: Date;
+
+    @Column()
+    status: number;
 }

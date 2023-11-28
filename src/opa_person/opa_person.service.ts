@@ -54,6 +54,7 @@ export class OpaPersonService {
       state: createOpaPersonDto.state,
       street: createOpaPersonDto.street,
       streetNumber: createOpaPersonDto.streetNumber,
+      ocuppation: createOpaPersonDto.ocuppation,
       user: {
         email: createOpaPersonDto.email,
         username: createOpaPersonDto.username,

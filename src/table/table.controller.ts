@@ -3,6 +3,7 @@ import { TableService } from './table.service';
 import { CreateTableDto } from './dto/create-table.dto';
 import { UpdateTableDto } from './dto/update-table.dto';
 import { AuthGuard } from '../auth/auth.guard';
+import { AddCustomerDto } from './dto/add-customer.dto';
 
 @Controller('table')
 @UseGuards(AuthGuard)
@@ -13,6 +14,12 @@ export class TableController {
   async create(@Body() createTableDto: CreateTableDto) {
     return await this.tableService.create(createTableDto);
   }
+
+  @Post("/add-customer")
+  async addCustomer(@Body() addCustomerDto: AddCustomerDto) {
+    return await this.tableService.addCustomer(addCustomerDto);
+  }
+
 
   @Get()
   async findAll() {

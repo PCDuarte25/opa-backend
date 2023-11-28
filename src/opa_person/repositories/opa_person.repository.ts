@@ -1,7 +1,7 @@
 import { Injectable } from "@nestjs/common";
 import { Repository } from "typeorm";
 import { PersonCreateContract } from "../opa_person.contracts";
-import { User } from "../entities/opa_person.entity";
+import { User } from "../entities/user.entity";
 import { Person } from "../entities/person.entity";
 
 @Injectable()
@@ -35,6 +35,7 @@ export class OpaPersonRepository {
       state: person.state,
       street: person.street,
       streetNumber: person.streetNumber,
+      ocuppation: person.ocuppation,
     }
 
     personEntity.user = userCreated;

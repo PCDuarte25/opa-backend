@@ -10,6 +10,6 @@ export class Bill {
     @OneToMany(() => Order, order => order.bill, { eager: true })
     orders: Order[];
 
-    @OneToOne(() => Table, table => table.bill, { eager: true })
+    @OneToOne(() => Table, table => table.bill)
     table: Table;
 }

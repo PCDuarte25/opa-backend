@@ -13,9 +13,11 @@ export class AuthService {
     private jwtService: JwtService) { }
 
   async login({ username, password }: LoginDto): Promise<LoginOutputDto> {
+    console.log({ username, password })
+
     const person = await this.personService.findByUsername(username);
     const user = person?.user;
-
+    console.log("fim de tarde")
     const isValidLogin = user ? await this.encrypter.compare(password, user.password) : false;
 
     if (!isValidLogin) {
