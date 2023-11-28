@@ -1,4 +1,4 @@
-import { Column, Entity, ManyToOne, OneToMany, OneToOne, PrimaryGeneratedColumn, Relation } from "typeorm";
+import { Column, Entity, JoinColumn, ManyToOne, OneToMany, OneToOne, PrimaryGeneratedColumn, Relation } from "typeorm";
 import { User } from "./user.entity";
 import { Order } from "../../order/entities/order.entity";
 import { Table } from "../../table/entities/table.entity";
@@ -50,16 +50,17 @@ export class Person {
     @Column({ type: 'date' })
     birthDate: string;
 
-    @Column({ type: 'enum', enum: OccupationEnum })
+    @Column({ type: 'enum', enum: OccupationEnum, default: OccupationEnum.Adm })
     ocuppation: number;
 
-    @OneToOne(() => User, user => user.person, { eager: true })
+    @OneToOne(() => User, user => user.person, { cascade: true })
+    @JoinColumn({ referencedColumnName: "id", name: "user_id" })
     user?: User;
 
-    @OneToMany(() => Order, order => order.responsible)
+    @OneToMany(() => Order, order => order.responsible, { nullable: true })
     orders?: Order[];
 
-    @ManyToOne(() => Table, table => table.persons)
+    @ManyToOne(() => Table, table => table.persons, { nullable: true })
     table?: Table;
 
     @OneToMany(() => Table, table => table.persons, { nullable: true })

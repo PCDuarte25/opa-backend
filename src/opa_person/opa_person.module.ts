@@ -6,6 +6,7 @@ import { DatabaseModule } from '../datasources/database.module';
 import { EncrypterModule } from 'src/shared/services/encrypter/encrypter.module';
 import { EncrypterService } from 'src/shared/services/encrypter/encrypter.service';
 import { Person } from './entities/person.entity';
+import { User } from './entities/user.entity';
 
 @Module({
   imports: [DatabaseModule, EncrypterModule],
@@ -14,6 +15,11 @@ import { Person } from './entities/person.entity';
     {
       provide: 'PERSON_REPOSITORY',
       useFactory: (dataSource: DataSource) => dataSource.getRepository(Person),
+      inject: ['DATA_SOURCE'],
+    },
+    {
+      provide: 'USER_REPOSITORY',
+      useFactory: (dataSource: DataSource) => dataSource.getRepository(User),
       inject: ['DATA_SOURCE'],
     },
     {

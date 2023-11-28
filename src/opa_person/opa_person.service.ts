@@ -3,7 +3,8 @@ import { Repository } from 'typeorm';
 import { CreateOpaPersonDto, CreateOpaPersonOutputDto } from './dtos/create-opa_person.dto';
 import { PersonCreateContract } from './opa_person.contracts';
 import { EncrypterService } from 'src/shared/services/encrypter/encrypter.service';
-import { Person } from './entities/person.entity';
+import { OccupationEnum, Person } from './entities/person.entity';
+import { User } from './entities/user.entity';
 
 @Injectable()
 export class OpaPersonService {
@@ -11,14 +12,18 @@ export class OpaPersonService {
   constructor(
     @Inject('PERSON_REPOSITORY')
     private opaPersonRepository: Repository<Person>,
+    @Inject('USER_REPOSITORY')
+    private userRepository: Repository<User>,
     @Inject('ENCRYPTER_SERVICE')
     private encrypterService: EncrypterService,
   ) { }
 
   async create(createOpaPersonDto: CreateOpaPersonDto): Promise<CreateOpaPersonOutputDto> {
-    if (await this.opaPersonRepository.findOne({ where: { cpf: createOpaPersonDto.cpf } })) {
+    console.log("paozin")
+    if (await this.opaPersonRepository.findOne({ where: { cpf: createOpaPersonDto.cpf }, relations: ['user'] })) {
       throw new Error('Já existe um usuário com este CPF.');
     }
+    console.log("paozin1")
     if (await this.opaPersonRepository.findOne({
       where: {
         user: {
@@ -28,7 +33,7 @@ export class OpaPersonService {
     })) {
       throw new Error('Já existe um usuário com este e-mail.');
     }
-
+    console.log("paozin34")
     if (await this.opaPersonRepository.findOne({
       where: {
         user: {
@@ -38,7 +43,6 @@ export class OpaPersonService {
     })) {
       throw new Error('Já existe um usuário com este usuário.');
     }
-
     const hashedPassword = await this.encrypterService.encrypt(createOpaPersonDto.password);
 
     const personCreate: PersonCreateContract = {
@@ -54,14 +58,13 @@ export class OpaPersonService {
       state: createOpaPersonDto.state,
       street: createOpaPersonDto.street,
       streetNumber: createOpaPersonDto.streetNumber,
-      ocuppation: createOpaPersonDto.ocuppation,
+      ocuppation: createOpaPersonDto.ocuppation ?? OccupationEnum.Adm,
       user: {
         email: createOpaPersonDto.email,
         username: createOpaPersonDto.username,
         password: hashedPassword,
       }
     }
-
     const person = this.opaPersonRepository.create(personCreate);
     await this.opaPersonRepository.save(person);
 

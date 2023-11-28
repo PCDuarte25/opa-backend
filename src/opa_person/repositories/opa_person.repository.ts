@@ -17,9 +17,7 @@ export class OpaPersonRepository {
       password: person.user.password,
       username: person.user.username,
     }
-
-    const user = await this.userRepository.create(userEntity)
-
+    const user = this.userRepository.create(userEntity)
     const userCreated = await this.userRepository.save(user)
 
     const personEntity: Person = {
@@ -39,8 +37,7 @@ export class OpaPersonRepository {
     }
 
     personEntity.user = userCreated;
-
-    const personCreated = await this.personRepository.create(personEntity)
+    const personCreated = this.personRepository.create(personEntity)
 
     return await this.userRepository.save(personCreated)
   }
