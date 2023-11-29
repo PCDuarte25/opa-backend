@@ -18,4 +18,5 @@ export interface PersonCreateContract {
   state: string;
   cep: string;
   birthDate: string;
+  ocuppation: number;
 }

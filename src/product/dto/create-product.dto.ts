@@ -1,17 +1,15 @@
-import { MeasurementUnit, ProductItem } from '../../database_config/product_item/productItems.entity';
+import { MeasurementUnit } from "../../stock/entities/stock.entity";
 
-export class CreateProductDto {
-    id: number;
-    name: string;
-    price: number;
-    productCode: string;
-    items: CreateProductItem[];
+export interface CreateProductDto {
+    productName: string;
+    productPrice: number;
+    productItems: ProductItemsDto[];
 }
 
-export class CreateProductItem {
-    stockId: number;
-    isPortion: boolean;
-    portionQuantity: number;
+export interface ProductItemsDto {
+    stockProductId: number;
     measurementUnit: MeasurementUnit;
+    stockProductName: string;
+    isPortion: boolean;
     quantity: number;
 }

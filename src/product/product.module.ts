@@ -1,12 +1,11 @@
 import { Module } from '@nestjs/common';
 import { ProductService } from './product.service';
 import { ProductController } from './product.controller';
-
 import { DataSource } from 'typeorm';
+import { ProductItem } from '../database_config/productItems/entity/productItems.entity';
 import { StockModule } from '../stock/stock.module';
 import { DatabaseModule } from '../datasources/database.module';
 import { Product } from './entities/product.entity';
-import { ProductItem } from '../database_config/product_item/productItems.entity';
 
 @Module({
   controllers: [ProductController],
@@ -22,6 +21,7 @@ import { ProductItem } from '../database_config/product_item/productItems.entity
       inject: ['DATA_SOURCE'],
     },
   ],
-  imports: [StockModule, DatabaseModule]
+  imports: [StockModule, DatabaseModule],
+  exports: [ProductService],
 })
 export class ProductModule { }

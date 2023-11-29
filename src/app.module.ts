@@ -1,4 +1,4 @@
-import { Module } from '@nestjs/common';
+import { MiddlewareConsumer, Module, NestModule } from '@nestjs/common';
 import { AppController } from './app.controller';
 import { AppService } from './app.service';
 import { DatabaseModule } from './datasources/database.module';
@@ -8,9 +8,9 @@ import { EncrypterModule } from './shared/services/encrypter/encrypter.module';
 import { AuthModule } from './auth/auth.module';
 import { StockModule } from './stock/stock.module';
 import { ProductModule } from './product/product.module';
-import { ProductItemModule } from './product-item/product-item.module';
-import { ProductItemModule } from './product-item/product-item.module';
-
+import { TableModule } from './table/table.module';
+import { OrderModule } from './order/order.module';
+import { BillModule } from './bill/bill.module';
 @Module({
   imports: [
     DatabaseModule,
@@ -20,8 +20,13 @@ import { ProductItemModule } from './product-item/product-item.module';
     AuthModule,
     StockModule,
     ProductModule,
+    TableModule,
+    OrderModule,
+    BillModule,
   ],
   controllers: [AppController],
   providers: [AppService],
 })
-export class AppModule { }
+export class AppModule {
+
+}

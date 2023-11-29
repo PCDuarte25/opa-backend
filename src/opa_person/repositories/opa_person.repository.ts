@@ -1,8 +1,8 @@
 import { Injectable } from "@nestjs/common";
-import { Person } from "src/database_config/person/entity/person.entity";
 import { Repository } from "typeorm";
 import { PersonCreateContract } from "../opa_person.contracts";
-import { User } from "../../database_config/user/entity/user.entity";
+import { User } from "../entities/user.entity";
+import { Person } from "../entities/person.entity";
 
 @Injectable()
 export class OpaPersonRepository {
@@ -17,9 +17,7 @@ export class OpaPersonRepository {
       password: person.user.password,
       username: person.user.username,
     }
-
-    const user = await this.userRepository.create(userEntity)
-
+    const user = this.userRepository.create(userEntity)
     const userCreated = await this.userRepository.save(user)
 
     const personEntity: Person = {
@@ -35,11 +33,11 @@ export class OpaPersonRepository {
       state: person.state,
       street: person.street,
       streetNumber: person.streetNumber,
+      ocuppation: person.ocuppation,
     }
 
     personEntity.user = userCreated;
-
-    const personCreated = await this.personRepository.create(personEntity)
+    const personCreated = this.personRepository.create(personEntity)
 
     return await this.userRepository.save(personCreated)
   }

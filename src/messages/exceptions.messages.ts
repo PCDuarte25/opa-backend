@@ -11,3 +11,5 @@ export const ProdutoNomeInvalido = "O nome do produto é obrigatório."
 export const ProdutoIngredientesInvalidos = "O produto enviado não possui nenhum ingrediente."
 
 export const ProdutoNomeJaExistente = "Este nome já está cadastrado."
+
+export const CodigoMesaJaExistente = "Já existe uma mesa com este código."

@@ -1,6 +1,5 @@
-import { Column, Entity, ManyToOne, OneToOne, PrimaryGeneratedColumn } from "typeorm";
-import { Table } from "../../table/entity/table.entity";
-import { Person } from "../../person/entity/person.entity";
+import { Column, Entity, OneToOne, PrimaryGeneratedColumn, Relation } from "typeorm";
+import { Person } from "./person.entity";
 
 @Entity()
 export class User {
@@ -18,7 +17,4 @@ export class User {
 
     @OneToOne(() => Person, person => person.user)
     person?: Person;
-
-    @ManyToOne(() => Table, table => table.users)
-    table?: Table;
 }

@@ -14,6 +14,7 @@ export class CreateOpaPersonDto {
   state!: string;
   cep!: string;
   birthDate!: string;
+  ocuppation!: number;
 }
 
 export class CreateOpaPersonOutputDto {

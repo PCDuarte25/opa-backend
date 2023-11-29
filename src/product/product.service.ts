@@ -1,62 +1,62 @@
 import { Inject, Injectable } from '@nestjs/common';
 import { CreateProductDto } from './dto/create-product.dto';
-import { UpdateProductDto } from './dto/update-product.dto';
-import { Repository } from 'typeorm';
 import { Product } from './entities/product.entity';
-import { Stock } from '../stock/entities/stock.entity';
-import { ProductItem } from '../database_config/product_item/productItems.entity';
+import { Repository } from 'typeorm';
+import { ProductItem } from '../database_config/productItems/entity/productItems.entity';
+import { StockService } from '../stock/stock.service';
+import { ProdutoIngredientesInvalidos, ProdutoNomeInvalido, ProdutoNomeJaExistente, ProdutoPrecoInvalido } from '../messages/exceptions.messages';
 import { ValidationException } from '../utils/exceptions';
-import { ProdutoExistente } from '../messages/exceptions.messages';
 
 @Injectable()
 export class ProductService {
+
   constructor(
-    @Inject('PRODUCT_REPOSITORY')
+    @Inject("PRODUCT_REPOSITORY")
     private productRepository: Repository<Product>,
-    @Inject('PRODUCT_ITEM_REPOSITORY')
-    private productItemRepository: Repository<ProductItem>,
-    @Inject('STOCK_REPOSITORY')
-    private stockRepository: Repository<Stock>) { }
-  async create(createProductDto: CreateProductDto) {
-
-    const product = await this.findProductByCode(createProductDto.productCode)
-    if (product) {
-      throw new ValidationException(ProdutoExistente)
-    }
-
-    const productCreated = await this.productRepository.create({
-      code: createProductDto.productCode,
-      name: createProductDto.name,
-      price: createProductDto.price,
-    })
-
-    const productEntity = await this.productRepository.save(productCreated)
-    const productItemEntities = await Promise.all(createProductDto.items.map(async (productItem) => {
-
-      const stock = await this.stockRepository.findOneBy({ id: productItem.stockId })
-
-      const productItemEntity = this.productItemRepository.create({
-        isPortion: productItem.isPortion,
-        measurementUnit: productItem.measurementUnit,
-        product: productEntity,
-        quantity: productItem.quantity,
-        stock: stock,
-      })
-
-      productItemEntities.push(productItemEntity)
-      return productItemEntities
-    }))
-
-    await this.productItemRepository.save(productItemEntities)
-
-    return 'Produto cadastrado com sucesso.';
+    @Inject("PRODUCT_ITEM_REPOSITORY")
+    private productItemsRepository: Repository<ProductItem>,
+    private stockService: StockService,
+  ) {
   }
 
-  async findProductByCode(productCode: string): Promise<Product> {
-    return await this.productRepository.findOneBy({ code: productCode })
+  async create(createProductsDto: CreateProductDto[]) {
+    for (const createProductDto of createProductsDto) {
+      console.log(createProductDto)
+      if (!createProductDto.productName) {
+        throw new ValidationException(ProdutoNomeInvalido)
+      }
+      if (createProductDto.productPrice <= 0) {
+        throw new ValidationException(ProdutoPrecoInvalido)
+      }
+
+      if (createProductDto.productItems.length == 0) {
+        throw new ValidationException(ProdutoIngredientesInvalidos)
+      }
+
+      const product = await this.productRepository.findOneBy({ name: createProductDto.productName })
+      if (product) {
+        throw new ValidationException(ProdutoNomeJaExistente)
+      }
+
+      const productItemEntities: ProductItem[] = []
+      const productEntity = this.productRepository.create({ name: createProductDto.productName, price: createProductDto.productPrice })
+      const productCreated = await this.productRepository.save(productEntity)
+      for await (const productItem of createProductDto.productItems) {
+        const stockProduct = await this.stockService.findOne(productItem.stockProductId)
+        const productItemEntity = this.productItemsRepository.create({ product: productCreated, quantity: productItem.quantity, stock: stockProduct, isPortion: productItem.isPortion, measurementUnit: productItem.measurementUnit })
+        productItemEntities.push(productItemEntity)
+      }
+      await this.productItemsRepository.save(productItemEntities)
+    }
+    return null;
   }
 
   findAll() {
-    return `This action returns all product`;
+    return this.productRepository.find();
   }
+
+  findOne(id: number) {
+    return this.productRepository.findOne({ where: { id } });
+  }
+
 }
