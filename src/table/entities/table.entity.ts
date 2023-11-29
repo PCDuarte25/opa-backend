@@ -15,7 +15,7 @@ export class Table {
     @OneToMany(() => Person, person => person.table)
     persons: Person[];
 
-    @OneToOne(() => Bill, bill => bill.table, { eager: true })
+    @OneToOne(() => Bill, bill => bill.table, { eager: false })
     bill: Bill;
 
     @ManyToOne(() => Person, person => person.table)

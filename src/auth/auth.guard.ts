@@ -18,7 +18,6 @@ export class AuthGuard implements CanActivate {
       const decodedToken = jwt.verify(token, '0p4-ch4v3-5UP3R-53cr3t4');
       return true;
     } catch (error) {
-      console.log(error)
       return false;
     }
   }

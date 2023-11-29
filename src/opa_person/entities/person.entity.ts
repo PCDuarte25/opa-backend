@@ -57,13 +57,13 @@ export class Person {
     @JoinColumn({ referencedColumnName: "id", name: "user_id" })
     user?: User;
 
-    @OneToMany(() => Order, order => order.responsible, { nullable: true })
+    @OneToMany(() => Order, order => order.responsible, { nullable: true, eager: false })
     orders?: Order[];
 
-    @ManyToOne(() => Table, table => table.persons, { nullable: true })
+    @ManyToOne(() => Table, table => table.persons, { nullable: true, eager: false })
     table?: Table;
 
-    @OneToMany(() => Table, table => table.persons, { nullable: true })
+    @OneToMany(() => Table, table => table.persons, { nullable: true, eager: false })
     waiterTables?: Table[];
     // table tava em user e deve estar em person pq user eh exclusivo so pra login
 }

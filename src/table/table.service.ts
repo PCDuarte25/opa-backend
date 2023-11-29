@@ -28,7 +28,7 @@ export class TableService {
   }
 
   async findAll() {
-    return await this.tableRepository.find();
+    return await this.tableRepository.query(`SELECT * FROM opa_web.table`);
   }
 
   async addCustomer(addCustomerDto: AddCustomerDto) {

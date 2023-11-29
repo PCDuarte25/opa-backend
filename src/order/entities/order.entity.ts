@@ -20,10 +20,10 @@ export class Order {
     @Column({ type: "enum", enum: OrderStatus, default: OrderStatus.EmAndamento })
     status: number;
 
-    @ManyToOne(() => Table, { eager: true })
+    @ManyToOne(() => Table, { eager: false })
     table: Table;
 
-    @ManyToMany(() => Person)
+    @ManyToMany(() => Person, person => person.orders, { eager: true })
     @JoinTable()
     people: Person[]
 

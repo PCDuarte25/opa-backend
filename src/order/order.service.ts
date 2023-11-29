@@ -25,7 +25,7 @@ export class OrderService {
   ) { }
 
   async create(createOrderDto: CreateOrderDto) {
-    var persons: Person[]
+    var persons: Person[] = []
     var product = await this.productsRepository.findOneBy({ id: createOrderDto.productId })
 
     for (var personId of createOrderDto.personIds) {
@@ -39,13 +39,13 @@ export class OrderService {
       table.bill = bill;
     }
 
-    const order = this.ordersRepository.create({ people: persons, product: product, status: OrderStatus.EmAndamento, table: table })
+    const order = this.ordersRepository.create({ people: persons, totalValue: createOrderDto.totalValue, checkouted: false, product: product, status: OrderStatus.EmAndamento, table: table })
 
     return await this.ordersRepository.save(order);
   }
 
   findAll() {
-    return `This action returns all order`;
+    return this.ordersRepository.find();
   }
 
   findOne(id: number) {
