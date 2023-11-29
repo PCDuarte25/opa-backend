@@ -1,4 +1,4 @@
-import { Column, Entity, OneToMany, PrimaryGeneratedColumn, Relation } from "typeorm";
+import { Column, Entity, OneToMany, PrimaryGeneratedColumn } from "typeorm";
 import { MeasurementUnit, ProductItem } from "../../database_config/product_item/productItems.entity";
 
 //tabela de cadastro de produto

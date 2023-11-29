@@ -1,3 +1,4 @@
+<<<<<<< HEAD
 import { MeasurementUnit, ProductItem } from '../../database_config/product_item/productItems.entity';
 
 export class CreateProductDto {
