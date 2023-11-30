@@ -31,8 +31,58 @@ export class TableService {
     return await this.tableRepository.save(tableEntity)
   }
 
-  async findAll() {
-    return await this.tableRepository.query(`SELECT * FROM opa_web.table`);
+  async findAll(): Promise<Table[]> {
+    const tables = await this.tableRepository.find({ relations: ['persons', 'waiter'] });
+    let tablesOutput = [];
+    for (const table of tables) {
+      const sqlQuery = `
+        SELECT o.id AS "id", o.status AS "status", p.name AS "name", p.price AS "price", COUNT(o.id) AS "quantity"
+        FROM \`order\` AS o
+        INNER JOIN product AS p
+        ON p.id = o.productId
+        WHERE o.tableId = ${table.id}
+        GROUP BY o.id;
+      `;
+
+      const ordersResult = await this.tableRepository.query(sqlQuery);
+      let orders = [];
+      let ordersQuantity = 0;
+      for (const order of ordersResult) {
+        orders.push({
+          id: order.id,
+          name: order.name,
+          price: order.price,
+          status: order.status,
+        });
+        ordersQuantity += parseInt(order.quantity);
+      }
+
+      let customers = [];
+      for (const customer of table.persons) {
+        customers.push({
+          id: customer.id,
+          name: customer.name,
+        });
+      }
+
+      const tableInfo = {
+        token: table.code,
+        id: table.id,
+        openTime: table.openedAt,
+        customers: customers,
+        status: table.status,
+        reponsableWaiter: table.waiter.name
+      }
+
+      tablesOutput.push({
+        id: table.id,
+        table: tableInfo,
+        orders: orders,
+        ordersQuantity: ordersQuantity,
+      });
+    }
+
+    return tablesOutput;
   }
 
   async addCustomer(addCustomerDto: AddCustomerDto) {
