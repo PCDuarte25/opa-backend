@@ -1,7 +1,6 @@
 import { Inject, Injectable } from '@nestjs/common';
 import { CreateStockDto } from './dto/create-stock.dto';
 import { UpdateStockDto } from './dto/update-stock.dto';
-import { InjectRepository } from '@nestjs/typeorm';
 import { Repository } from 'typeorm';
 import { Stock } from './entities/stock.entity';
 import { ValidationException } from '../utils/exceptions';
@@ -41,7 +40,11 @@ export class StockService {
   }
 
   async findOneByDescription(productDescription: string): Promise<Stock | null> {
-    return await this.stockRepository.findOneBy({ productDescription });
+    if (!productDescription) return null;
+
+    return await this.stockRepository.findOne({
+      where: { productDescription: productDescription }
+    });
   }
 
   async findAll(name: string = ''): Promise<Stock[]> {
