@@ -39,7 +39,7 @@ export class OrderService {
       table.bill = bill;
     }
 
-    const order = this.ordersRepository.create({ people: persons, totalValue: createOrderDto.totalValue, checkouted: false, product: product, status: OrderStatus.EmAndamento, table: table })
+    const order = this.ordersRepository.create({ people: persons, totalValue: createOrderDto.totalValue, checkouted: false, product: product, status: OrderStatus.EmAndamento, table: table, bill: table.bill })
 
     return await this.ordersRepository.save(order);
   }
