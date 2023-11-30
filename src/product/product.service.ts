@@ -51,8 +51,19 @@ export class ProductService {
     return null;
   }
 
-  findAll() {
-    return this.productRepository.find();
+  async findAll(): Promise<Product[]> {
+    const products = await this.productRepository.find();
+    let productsOutput = [];
+    for (const product of products) {
+      productsOutput.push({
+        id: product.id,
+        name: product.name,
+        description: 'Barreto vai implementar', // product.description,
+        price: product.price,
+      });
+    }
+
+    return productsOutput;
   }
 
   findOne(id: number) {

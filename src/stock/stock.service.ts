@@ -64,7 +64,6 @@ export class StockService {
 
       return stockItemsOutput;
     }
-
   }
 
   update(id: number, updateStockDto: UpdateStockDto) {
