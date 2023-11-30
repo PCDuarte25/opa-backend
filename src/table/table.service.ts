@@ -8,6 +8,7 @@ import { CodigoMesaJaExistente } from '../messages/exceptions.messages';
 import { AddCustomerDto } from './dto/add-customer.dto';
 import { AddWaiterDto } from './dto/add-waiter.dto';
 import { Person } from 'src/opa_person/entities/person.entity';
+import { Order } from 'src/order/entities/order.entity';
 
 @Injectable()
 export class TableService {
@@ -17,6 +18,8 @@ export class TableService {
     private tableRepository: Repository<Table>,
     @Inject('PERSON_REPOSITORY')
     private personRepository: Repository<Person>,
+    @Inject('ORDERS_REPOSITORY')
+    private ordersRepository: Repository<Order>
   ) { }
 
   async create(createTableDto: CreateTableDto) {
@@ -36,25 +39,23 @@ export class TableService {
     let tablesOutput = [];
     for (const table of tables) {
       const sqlQuery = `
-        SELECT o.id AS "id", o.status AS "status", p.name AS "name", p.price AS "price", COUNT(o.id) AS "quantity"
+        SELECT o.id AS "id"
         FROM \`order\` AS o
-        INNER JOIN product AS p
-        ON p.id = o.productId
         WHERE o.tableId = ${table.id}
-        GROUP BY o.id;
       `;
 
       const ordersResult = await this.tableRepository.query(sqlQuery);
       let orders = [];
       let ordersQuantity = 0;
       for (const order of ordersResult) {
+        const orderEntity = await this.ordersRepository.findOneBy({ id: order.id });
         orders.push({
-          id: order.id,
-          name: order.name,
-          price: order.price,
-          status: order.status,
+          id: orderEntity.id,
+          name: orderEntity.product.name,
+          price: orderEntity.product.price,
+          status: orderEntity.status,
         });
-        ordersQuantity += parseInt(order.quantity);
+        ordersQuantity++;
       }
 
       let customers = [];
@@ -119,7 +120,72 @@ export class TableService {
   }
 
   async findOne(id: number) {
-    return await this.tableRepository.findBy({ id });
+    const table = await this.tableRepository.findOne(
+      {
+        where: {id: id},
+        relations: ['persons', 'waiter']
+      }
+    );
+    if (!table) {
+      throw new ValidationException("Mesa não encontrada");
+    }
+
+    const sqlQuery = `
+      SELECT o.id AS "id"
+      FROM \`order\` AS o
+      WHERE o.tableId = ${table.id}
+    `;
+
+    const ordersResult = await this.tableRepository.query(sqlQuery);
+
+    let orders = [];
+    for (const order of ordersResult) {
+      const orderEntity = await this.ordersRepository.findOneBy({ id: order.id });
+
+      let customers = [];
+      for (const customer of orderEntity.people) {
+        customers.push({
+          id: customer.id,
+          name: customer.name,
+        });
+      }
+
+      orders.push({
+        id: orderEntity.id,
+        menuItem: {
+          id: orderEntity.product.id,
+          name: orderEntity.product.name,
+          price: orderEntity.product.price,
+          description: '',
+        },
+        customers: customers,
+        status: orderEntity.status,
+        orderedTime: orderEntity.date,
+        deliveredTime: orderEntity.checkouted ? orderEntity.date : 'Não entregue',
+      });
+    }
+
+    let tableCustomers = [];
+    for (const tablePerson of table.persons) {
+      tableCustomers.push({
+        id: tablePerson.id,
+        name: tablePerson.name,
+      });
+    }
+
+    const tableInfo = {
+      token: table.code,
+      id: table.id,
+      openTime: table.openedAt,
+      customers: tableCustomers,
+      status: table.status,
+      reponsableWaiter: table.waiter.name
+    }
+
+    return {
+      table: tableInfo,
+      orders: orders,
+    }
   }
 
   update(id: number, updateTableDto: UpdateTableDto) {
