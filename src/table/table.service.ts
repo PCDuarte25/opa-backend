@@ -126,6 +126,7 @@ export class TableService {
         relations: ['persons', 'waiter']
       }
     );
+
     if (!table) {
       throw new ValidationException("Mesa não encontrada");
     }

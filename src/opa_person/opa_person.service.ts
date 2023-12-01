@@ -19,11 +19,10 @@ export class OpaPersonService {
   ) { }
 
   async create(createOpaPersonDto: CreateOpaPersonDto): Promise<CreateOpaPersonOutputDto> {
-    console.log("paozin")
-    if (await this.opaPersonRepository.findOne({ where: { cpf: createOpaPersonDto.cpf }, relations: ['user'] })) {
+    if (await this.opaPersonRepository.findOne({
+      where: { cpf: createOpaPersonDto.cpf }, relations: ['user'] })) {
       throw new Error('Já existe um usuário com este CPF.');
     }
-    console.log("paozin1")
     if (await this.opaPersonRepository.findOne({
       where: {
         user: {
@@ -33,7 +32,6 @@ export class OpaPersonService {
     })) {
       throw new Error('Já existe um usuário com este e-mail.');
     }
-    console.log("paozin34")
     if (await this.opaPersonRepository.findOne({
       where: {
         user: {
@@ -41,7 +39,7 @@ export class OpaPersonService {
         }
       }, relations: ['user']
     })) {
-      throw new Error('Já existe um usuário com este usuário.');
+      throw new Error('Usuário já cadastrado.');
     }
     const hashedPassword = await this.encrypterService.encrypt(createOpaPersonDto.password);
 
@@ -65,20 +63,26 @@ export class OpaPersonService {
         password: hashedPassword,
       }
     }
-    const person = this.opaPersonRepository.create(personCreate);
-    await this.opaPersonRepository.save(person);
 
-    const personOutputDto: CreateOpaPersonOutputDto = {
-      id: person.id,
-      name: person.name,
-      cpf: person.cpf,
-      user: {
-        email: person.user.email,
-        username: person.user.username,
+    try {
+      const person = this.opaPersonRepository.create(personCreate);
+      await this.opaPersonRepository.save(person);
+
+      const personOutputDto: CreateOpaPersonOutputDto = {
+        id: person.id,
+        name: person.name,
+        cpf: person.cpf,
+        user: {
+          email: person.user.email,
+          username: person.user.username,
+        }
       }
-    }
 
-    return personOutputDto;
+      return personOutputDto;
+    }
+    catch (e) {
+      throw new Error('Aconteceu algum erro ao criar o usuário, por favor verifique os campos inseridos.');
+    }
   }
 
   async findByUsername(username: string): Promise<Person> {
