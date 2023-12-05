@@ -24,28 +24,32 @@ export class OrderService {
     private billRepository: Repository<Bill>,
   ) { }
 
-  async create(createOrderDto: CreateOrderDto) {
-    var persons: Person[] = []
-    var product = await this.productsRepository.findOneBy({ id: createOrderDto.productId })
+  async create(createOrdersDto: CreateOrderDto[]) {
+    var ordersCreated = [];
+    for (var createOrderDto of createOrdersDto) {
+      var persons: Person[] = []
+      var product = await this.productsRepository.findOneBy({ id: createOrderDto.productId })
 
-    for (var personId of createOrderDto.personIds) {
-      const person = await this.personRepository.findOneBy({ id: personId })
-      persons.push(person);
+      for (var personId of createOrderDto.personIds) {
+        const person = await this.personRepository.findOneBy({ id: personId })
+        persons.push(person);
+      }
+
+      const table = await this.tableRepository.findOne({
+        where: { id: createOrderDto.tableId },
+        relations: ['waiter']
+      });
+
+      if (!table.bill) {
+        const bill = await this.billRepository.save(this.billRepository.create({}));
+        table.bill = bill;
+      }
+
+      const order = this.ordersRepository.create({ people: persons, totalValue: createOrderDto.totalValue, checkouted: false, product: product, status: OrderStatus.EmAndamento, table: table, bill: table.bill, responsible: table.waiter })
+
+      ordersCreated.push(await this.ordersRepository.save(order));
     }
-
-    const table = await this.tableRepository.findOne({
-      where: { id: createOrderDto.tableId },
-      relations: ['waiter']
-    });
-
-    if (!table.bill) {
-      const bill = await this.billRepository.save(this.billRepository.create({}));
-      table.bill = bill;
-    }
-
-    const order = this.ordersRepository.create({ people: persons, totalValue: createOrderDto.totalValue, checkouted: false, product: product, status: OrderStatus.EmAndamento, table: table, bill: table.bill, responsible: table.waiter })
-
-    return await this.ordersRepository.save(order);
+    return ordersCreated
   }
 
   async findAll(): Promise<Order[]> {
