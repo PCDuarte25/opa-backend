@@ -72,7 +72,7 @@ export class TableService {
         openTime: table.openedAt,
         customers: customers,
         status: table.status,
-        reponsableWaiter: table.waiter.name
+        waiter: table.waiter.name
       }
 
       tablesOutput.push({
