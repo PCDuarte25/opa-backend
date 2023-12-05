@@ -1,7 +1,6 @@
 import { Inject, Injectable } from '@nestjs/common';
 import { CreateStockDto } from './dto/create-stock.dto';
 import { UpdateStockDto } from './dto/update-stock.dto';
-import { InjectRepository } from '@nestjs/typeorm';
 import { Repository } from 'typeorm';
 import { Stock } from './entities/stock.entity';
 import { ValidationException } from '../utils/exceptions';
@@ -15,7 +14,7 @@ export class StockService {
   ) { }
 
   async create(createStockDto: CreateStockDto[]): Promise<Stock[] | null> {
-    var stockEntities: CreateStockDto[]
+    var stockEntities: CreateStockDto[] = [];
 
     for (var stockDto of createStockDto) {
       const stockExists = await this.findOneByDescription(stockDto.productDescription)
@@ -41,13 +40,33 @@ export class StockService {
   }
 
   async findOneByDescription(productDescription: string): Promise<Stock | null> {
-    return await this.stockRepository.findOneBy({ productDescription });
+    if (!productDescription) return null;
+
+    return await this.stockRepository.findOne({
+      where: { productDescription: productDescription }
+    });
   }
 
-  async findAll(name: string): Promise<Stock[]> {
-    return await this.stockRepository.createQueryBuilder('Stock')
+  async findAll(name: string = ''): Promise<Stock[]> {
+    if (name) {
+      return await this.stockRepository.createQueryBuilder('Stock')
       .where('LOWER(productDescription) LIKE LOWER(:productDescription)', { productDescription: `%${name}%` }) // Consulta "LIKE" insensível a maiúsculas/minúsculas
       .getMany();
+    }
+    else {
+      const stockItems = await this.stockRepository.find();
+      let stockItemsOutput = [];
+      for (const stockItem of stockItems) {
+        stockItemsOutput.push({
+          id: stockItem.id,
+          name: stockItem.productDescription,
+          qt: stockItem.stockQuantity,
+          un: stockItem.measurementUnit
+        });
+      }
+
+      return stockItemsOutput;
+    }
   }
 
   update(id: number, updateStockDto: UpdateStockDto) {

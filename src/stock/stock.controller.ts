@@ -2,8 +2,6 @@ import { Controller, Get, Post, Body, Patch, Param, Delete, Query, UseGuards } f
 import { StockService } from './stock.service';
 import { CreateStockDto } from './dto/create-stock.dto';
 import { UpdateStockDto } from './dto/update-stock.dto';
-import { ValidationException } from '../utils/exceptions';
-import { ProdutoExistente } from '../messages/exceptions.messages';
 import { AuthGuard } from '../auth/auth.guard';
 
 @Controller('stock')

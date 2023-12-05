@@ -1,5 +1,20 @@
 version: '3.7'
 services:
+  opa_api_backend:
+    build:
+      context: .
+    volumes:
+      - '.:/app'
+    entrypoint: ./.docker/opa_init_script.sh
+    ports:
+      - 3000:3000
+      - 9229:9229
+    depends_on:
+      mysql_db:
+        condition: service_healthy
+    networks:
+      - opa_network
+
   mysql_db:
     image: mysql:latest
     environment:

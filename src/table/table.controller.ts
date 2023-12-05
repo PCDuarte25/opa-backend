@@ -4,6 +4,7 @@ import { CreateTableDto } from './dto/create-table.dto';
 import { UpdateTableDto } from './dto/update-table.dto';
 import { AuthGuard } from '../auth/auth.guard';
 import { AddCustomerDto } from './dto/add-customer.dto';
+import { AddWaiterDto } from './dto/add-waiter.dto';
 
 @Controller('table')
 @UseGuards(AuthGuard)
@@ -20,6 +21,10 @@ export class TableController {
     return await this.tableService.addCustomer(addCustomerDto);
   }
 
+  @Post("/add-waiter")
+  async addWaiter(@Body() addWaiterDto: AddWaiterDto) {
+    return await this.tableService.addWaiter(addWaiterDto);
+  }
 
   @Get()
   async findAll() {
