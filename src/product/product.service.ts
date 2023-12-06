@@ -39,7 +39,7 @@ export class ProductService {
       }
 
       const productItemEntities: ProductItem[] = []
-      const productEntity = this.productRepository.create({ name: createProductDto.productName, price: createProductDto.productPrice })
+      const productEntity = this.productRepository.create({ name: createProductDto.productName, price: createProductDto.productPrice, type: createProductDto.type })
       const productCreated = await this.productRepository.save(productEntity)
       for await (const productItem of createProductDto.productItems) {
         const stockProduct = await this.stockService.findOne(productItem.stockProductId)
