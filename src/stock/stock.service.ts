@@ -25,7 +25,8 @@ export class StockService {
       const stock: Stock = {
         measurementUnit: stockDto.measurementUnit,
         productDescription: stockDto.productDescription,
-        stockQuantity: stockDto.stockQuantity
+        stockQuantity: stockDto.stockQuantity,
+        type: stockDto.type
       }
 
       const stockEntity = this.stockRepository.create(stock)
@@ -50,8 +51,8 @@ export class StockService {
   async findAll(name: string = ''): Promise<Stock[]> {
     if (name) {
       return await this.stockRepository.createQueryBuilder('Stock')
-      .where('LOWER(productDescription) LIKE LOWER(:productDescription)', { productDescription: `%${name}%` }) // Consulta "LIKE" insensível a maiúsculas/minúsculas
-      .getMany();
+        .where('LOWER(productDescription) LIKE LOWER(:productDescription)', { productDescription: `%${name}%` }) // Consulta "LIKE" insensível a maiúsculas/minúsculas
+        .getMany();
     }
     else {
       const stockItems = await this.stockRepository.find();

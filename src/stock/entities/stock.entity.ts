@@ -24,5 +24,8 @@ export class Stock {
 
     @OneToMany(() => ProductItem, productItem => productItem.stock)
     productItems?: ProductItem[];
+
+    @Column()
+    type: string;
 }
 

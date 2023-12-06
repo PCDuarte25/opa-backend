@@ -16,4 +16,7 @@ export class Product {
 
     @OneToMany(() => ProductItem, productItem => productItem.product, { cascade: true, eager: true })
     items: ProductItem[];
+
+    @Column()
+    type: string;
 }

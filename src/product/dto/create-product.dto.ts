@@ -2,6 +2,7 @@ import { MeasurementUnit } from "../../stock/entities/stock.entity";
 
 export interface CreateProductDto {
     productName: string;
+    type: string;
     productPrice: number;
     productItems: ProductItemsDto[];
 }
