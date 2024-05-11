@@ -1,7 +1,6 @@
 import { Controller, Get, Post, Body, Patch, Param, Delete, Response, HttpStatus, HttpCode } from '@nestjs/common';
 import { OpaPersonService } from './opa_person.service';
 import { CreateOpaPersonDto } from './dtos/create-opa_person.dto';
-import { UpdateOpaPersonDto } from './dtos/update-opa_person.dto';
 
 @Controller('opa-person')
 export class OpaPersonController {

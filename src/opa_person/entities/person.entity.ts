@@ -2,6 +2,7 @@ import { Column, Entity, JoinColumn, ManyToOne, OneToMany, OneToOne, PrimaryGene
 import { User } from "./user.entity";
 import { Order } from "../../order/entities/order.entity";
 import { Table } from "../../table/entities/table.entity";
+import { Restaurant } from "src/restaurant/entities/restaurant.entity";
 
 export enum OccupationEnum {
     Customer = 1,
@@ -65,5 +66,8 @@ export class Person {
 
     @OneToMany(() => Table, table => table.persons, { nullable: true, eager: false })
     waiterTables?: Table[];
+
+    @OneToMany(() => Restaurant, restaurant => restaurant.owner)
+    restaurant: Restaurant[];
     // table tava em user e deve estar em person pq user eh exclusivo so pra login
 }

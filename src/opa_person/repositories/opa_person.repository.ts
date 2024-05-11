@@ -34,6 +34,7 @@ export class OpaPersonRepository {
       street: person.street,
       streetNumber: person.streetNumber,
       ocuppation: person.ocuppation,
+      restaurant: person.restaurant,
     }
 
     personEntity.user = userCreated;
