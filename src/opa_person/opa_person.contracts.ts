@@ -1,3 +1,5 @@
+import { Restaurant } from "src/restaurant/entities/restaurant.entity";
+
 export interface UserCreateContract {
   email: string;
   username: string;
@@ -19,4 +21,6 @@ export interface PersonCreateContract {
   cep: string;
   birthDate: string;
   ocuppation: number;
+  restaurant?: Restaurant[];
+
 }

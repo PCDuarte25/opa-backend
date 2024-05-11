@@ -11,6 +11,7 @@ import { ProductModule } from './product/product.module';
 import { TableModule } from './table/table.module';
 import { OrderModule } from './order/order.module';
 import { BillModule } from './bill/bill.module';
+import { RestaurantModule } from './restaurant/restaurant.module';
 @Module({
   imports: [
     DatabaseModule,
@@ -23,6 +24,7 @@ import { BillModule } from './bill/bill.module';
     TableModule,
     OrderModule,
     BillModule,
+    RestaurantModule,
   ],
   controllers: [AppController],
   providers: [AppService],
