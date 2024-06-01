@@ -1,4 +1,4 @@
-import { Controller, Get, Post, Body, Patch, Param, Delete, UseGuards } from '@nestjs/common';
+import { Controller, Get, Post, Body, Patch, Param, Delete, UseGuards, Request } from '@nestjs/common';
 import { TableService } from './table.service';
 import { CreateTableDto } from './dto/create-table.dto';
 import { UpdateTableDto } from './dto/update-table.dto';
@@ -12,8 +12,8 @@ export class TableController {
   constructor(private readonly tableService: TableService) { }
 
   @Post()
-  async create(@Body() createTableDto: CreateTableDto) {
-    return await this.tableService.create(createTableDto);
+  async create(@Request() request, @Body() createTableDto: CreateTableDto) {
+    return await this.tableService.create(request['restaurantId'], createTableDto);
   }
 
   @Post("/add-customer")
@@ -27,8 +27,8 @@ export class TableController {
   }
 
   @Get()
-  async findAll() {
-    return await this.tableService.findAll();
+  async findAll(@Request() request) {
+    return await this.tableService.findAll(request['restaurantId']);
   }
 
   @Get(':id')

@@ -2,6 +2,7 @@
 import { Entity, Column, PrimaryGeneratedColumn, OneToMany, OneToOne, ManyToOne, CreateDateColumn } from 'typeorm';
 import { Bill } from '../../bill/entities/bill.entity';
 import { Person } from '../../opa_person/entities/person.entity';
+import { Restaurant } from '../../restaurant/entities/restaurant.entity';
 
 @Entity()
 export class Table {
@@ -25,4 +26,7 @@ export class Table {
 
     @Column({ default: 1 })
     status: number;
+
+    @ManyToOne(() => Restaurant, (restaurant) => restaurant.tables)
+    restaurant: Restaurant;
 }

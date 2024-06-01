@@ -1,5 +1,8 @@
 import { Inject, Injectable } from '@nestjs/common';
-import { CreateRestaurantDto, CreateRestaurantOutputDto } from './dtos/create-restaurant.dto';
+import {
+  CreateRestaurantDto,
+  CreateRestaurantOutputDto,
+} from './dtos/create-restaurant.dto';
 import { Repository } from 'typeorm';
 import { Restaurant } from './entities/restaurant.entity';
 import { Person } from 'src/opa_person/entities/person.entity';
@@ -10,14 +13,26 @@ export class RestaurantService {
     @Inject('RESTAURANT_REPOSITORY')
     private restaurantRepository: Repository<Restaurant>,
     @Inject('PERSON_REPOSITORY')
-    private opaPersonRepository: Repository<Person>
-  ) { }
+    private opaPersonRepository: Repository<Person>,
+  ) {}
 
-  async create(createRestaurantDto: CreateRestaurantDto): Promise<CreateRestaurantOutputDto> {
-    if (await this.restaurantRepository.findOneBy({ cnpj: createRestaurantDto.cnpj })) {
+  async create(
+    createRestaurantDto: CreateRestaurantDto,
+  ): Promise<CreateRestaurantOutputDto> {
+    if (
+      await this.restaurantRepository.findOneBy({
+        cnpj: createRestaurantDto.cnpj,
+      })
+    ) {
       throw new Error('Já existe um restaurante com este CNPJ.');
     }
-    const owner = await this.opaPersonRepository.findOneBy({ id: createRestaurantDto.ownerId });
+    const owner = await this.opaPersonRepository.findOneBy({
+      id: createRestaurantDto.ownerId,
+    });
+
+    if (!owner) {
+      throw new Error('Owner nao encontrado');
+    }
 
     try {
       const restaurant = this.restaurantRepository.create({
@@ -32,21 +47,22 @@ export class RestaurantService {
         state: createRestaurantDto.state,
         cep: createRestaurantDto.cep,
         phoneNumber: createRestaurantDto.phoneNumber,
-        owner: owner
-      })
+      });
+      owner.personRestaurant = restaurant;
+      owner.restaurant = restaurant;
       await this.restaurantRepository.save(restaurant);
+      await this.opaPersonRepository.save(owner);
 
       const restaurantOutputDto: CreateRestaurantOutputDto = {
         id: restaurant.id,
         name: restaurant.name,
-      }
+      };
 
       return restaurantOutputDto;
-    }
-    catch (e) {
-      throw new Error('Aconteceu algum erro ao criar o restaurante, por favor verifique os campos inseridos.');
+    } catch (e) {
+      throw new Error(
+        'Aconteceu algum erro ao criar o restaurante, por favor verifique os campos inseridos.',
+      );
     }
   }
-
 }
-

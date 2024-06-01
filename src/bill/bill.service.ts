@@ -13,15 +13,16 @@ export class BillService {
     private billRepository: Repository<Bill>,
   ) { }
 
-  create(createBillDto: CreateBillDto) {
+  create(restaurantId: number, createBillDto: CreateBillDto) {
     return 'This action adds a new bill';
   }
 
-  async findAll() {
+  async findAll(restaurantId: number) {
     const bills = await this.billRepository.find({
       where: {
         orders: {
           status: 1,
+          restaurant: { id: restaurantId },
         }
       }, relations: ['orders']
     });

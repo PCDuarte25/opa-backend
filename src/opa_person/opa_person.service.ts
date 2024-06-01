@@ -5,6 +5,9 @@ import { PersonCreateContract } from './opa_person.contracts';
 import { EncrypterService } from 'src/shared/services/encrypter/encrypter.service';
 import { OccupationEnum, Person } from './entities/person.entity';
 import { User } from './entities/user.entity';
+import { Restaurant } from '../restaurant/entities/restaurant.entity';
+import { ValidationException } from '../utils/exceptions';
+import { PersonAuthData } from './dtos/auth-data';
 
 @Injectable()
 export class OpaPersonService {
@@ -14,6 +17,8 @@ export class OpaPersonService {
     private opaPersonRepository: Repository<Person>,
     @Inject('USER_REPOSITORY')
     private userRepository: Repository<User>,
+    @Inject('RESTAURANT_REPOSITORY')
+    private restaurantRepository: Repository<Restaurant>,
     @Inject('ENCRYPTER_SERVICE')
     private encrypterService: EncrypterService,
   ) { }
@@ -43,6 +48,21 @@ export class OpaPersonService {
     }
     const hashedPassword = await this.encrypterService.encrypt(createOpaPersonDto.password);
 
+    let restaurant: Restaurant;
+    let ownRestaurant: Restaurant;
+    if (createOpaPersonDto.restaurantId) {
+      restaurant = await this.restaurantRepository.findOneBy({ id: createOpaPersonDto.restaurantId })
+      if (!restaurant) {
+        throw new ValidationException('Restaurante nao encontrado');
+      }
+    } 
+     if (createOpaPersonDto.ownRestaurantId) {
+      ownRestaurant = await this.restaurantRepository.findOneBy({ id: createOpaPersonDto.ownRestaurantId })
+      if (!ownRestaurant) {
+        throw new ValidationException('Restaurante nao encontrado');
+      }
+    }
+
     const personCreate: PersonCreateContract = {
       name: createOpaPersonDto.name,
       gender: createOpaPersonDto.gender,
@@ -61,7 +81,9 @@ export class OpaPersonService {
         email: createOpaPersonDto.email,
         username: createOpaPersonDto.username,
         password: hashedPassword,
-      }
+      },
+      ownRestaurant: ownRestaurant,
+      restaurant: restaurant,
     }
 
     try {
@@ -85,15 +107,21 @@ export class OpaPersonService {
     }
   }
 
-  async findByUsername(username: string): Promise<Person> {
-    const person = await this.opaPersonRepository.findOne({
-      where: {
-        user: {
-          username: username,
-        }
-      }, relations: ['user']
-    });
+  async findByUsername(username: string): Promise<PersonAuthData> {
+    const person = await this.opaPersonRepository.query(
+      `SELECT
+        user.id,
+        user.password,
+        person.name,
+        person.restaurantId
+      FROM
+        person
+      INNER JOIN
+        user ON user.id = person.user_id
+      WHERE
+        user.username = '${username}'
+      `, []);
 
-    return person ?? null;
+    return person[0] ?? null;
   }
 }

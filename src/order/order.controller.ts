@@ -13,8 +13,8 @@ export class OrderController {
   }
 
   @Get()
-  findAll() {
-    return this.orderService.findAll();
+  findAll(restaurantId: number) {
+    return this.orderService.findAll(restaurantId);
   }
 
   @Get(':id')

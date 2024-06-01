@@ -11,9 +11,9 @@ export class AuthController {
   @HttpCode(200)
   async login(@Body() req: LoginDto, @Response() res) {
     try {
-      const token = await this.authService.login(req);
+      const authInfos = await this.authService.login(req);
       return res.json({
-        data: token,
+        data: authInfos,
         message: 'Login realizado com sucesso!',
       });
     } catch (e) {

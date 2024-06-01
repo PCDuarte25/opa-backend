@@ -21,6 +21,6 @@ export interface PersonCreateContract {
   cep: string;
   birthDate: string;
   ocuppation: number;
-  restaurant?: Restaurant[];
-
+  restaurant?: Restaurant;
+  ownRestaurant?: Restaurant;
 }

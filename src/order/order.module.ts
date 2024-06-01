@@ -9,6 +9,7 @@ import { Table } from '../table/entities/table.entity';
 import { Bill } from '../bill/entities/bill.entity';
 import { DatabaseModule } from '../datasources/database.module';
 import { Person } from '../opa_person/entities/person.entity';
+import { Restaurant } from '../restaurant/entities/restaurant.entity';
 
 @Module({
   controllers: [OrderController],
@@ -37,7 +38,12 @@ import { Person } from '../opa_person/entities/person.entity';
       provide: 'BILL_REPOSITORY',
       useFactory: (dataSource: DataSource) => dataSource.getRepository(Bill),
       inject: ['DATA_SOURCE'],
-    }
+    },
+    {
+      provide: 'RESTAURANT_REPOSITORY',
+      useFactory: (dataSource: DataSource) => dataSource.getRepository(Restaurant),
+      inject: ['DATA_SOURCE'],
+    },
   ],
   imports: [DatabaseModule, ProductModule]
 })

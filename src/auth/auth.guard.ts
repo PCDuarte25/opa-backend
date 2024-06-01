@@ -8,18 +8,18 @@ export class AuthGuard implements CanActivate {
   constructor(private readonly reflector: Reflector) { }
 
   canActivate(context: ExecutionContext): boolean {
-    return true;
-    // const request = context.switchToHttp().getRequest();
-    // console.log(request.headers)
-    // const token = request.headers['authorization'].split(' ')[1];
-    // if (!token) {
-    //   return false;
-    // }
-    // try {
-    //   const decodedToken = jwt.verify(token, '0p4-ch4v3-5UP3R-53cr3t4');
-    //   return true;
-    // } catch (error) {
-    //   return false;
-    // }
+    const request = context.switchToHttp().getRequest();
+    const token = request.headers['authorization'].split(' ')[1];
+    if (!token) {
+      return false;
+    }
+    try {
+      const decodedToken = jwt.verify(token, '0p4-ch4v3-5UP3R-53cr3t4');
+      request['restaurantId'] = decodedToken['restaurantId']
+
+      return true;
+    } catch (error) {
+      return false;
+    }
   }
 }

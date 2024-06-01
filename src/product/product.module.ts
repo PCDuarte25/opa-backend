@@ -6,6 +6,8 @@ import { ProductItem } from '../database_config/productItems/entity/productItems
 import { StockModule } from '../stock/stock.module';
 import { DatabaseModule } from '../datasources/database.module';
 import { Product } from './entities/product.entity';
+import { RestaurantModule } from '../restaurant/restaurant.module';
+import { Restaurant } from '../restaurant/entities/restaurant.entity';
 
 @Module({
   controllers: [ProductController],
@@ -20,8 +22,13 @@ import { Product } from './entities/product.entity';
       useFactory: (dataSource: DataSource) => dataSource.getRepository(ProductItem),
       inject: ['DATA_SOURCE'],
     },
+    {
+      provide: 'RESTAURANT_REPOSITORY',
+      useFactory: (dataSource: DataSource) => dataSource.getRepository(Restaurant),
+      inject: ['DATA_SOURCE'],
+    },
   ],
-  imports: [StockModule, DatabaseModule],
+  imports: [StockModule, DatabaseModule,],
   exports: [ProductService],
 })
 export class ProductModule { }
