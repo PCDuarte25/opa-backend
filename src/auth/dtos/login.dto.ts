@@ -4,5 +4,6 @@ export type LoginDto = {
 }
 
 export type LoginOutputDto = {
+  userId: number;
   token: string;
 }

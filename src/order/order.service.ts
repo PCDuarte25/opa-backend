@@ -7,6 +7,8 @@ import { Product } from '../product/entities/product.entity';
 import { Table } from '../table/entities/table.entity';
 import { Bill } from '../bill/entities/bill.entity';
 import { Person } from '../opa_person/entities/person.entity';
+import { Restaurant } from '../restaurant/entities/restaurant.entity';
+import { ValidationException } from '../utils/exceptions';
 
 @Injectable()
 export class OrderService {
@@ -22,6 +24,8 @@ export class OrderService {
     private tableRepository: Repository<Table>,
     @Inject('BILL_REPOSITORY')
     private billRepository: Repository<Bill>,
+    @Inject('RESTAURANT_REPOSITORY')
+    private restaurantRepository: Repository<Restaurant>,
   ) { }
 
   async create(createOrdersDto: CreateOrderDto[]) {
@@ -40,24 +44,29 @@ export class OrderService {
         relations: ['waiter']
       });
 
+      const restaurant = await this.restaurantRepository.findOne({ where: { id: createOrderDto.restaurantId }})
+      if (!restaurant) {
+        throw new ValidationException('Restaurante nao encontrado')
+      }
+
       if (!table.bill) {
-        const bill = await this.billRepository.save(this.billRepository.create({}));
+        const bill = await this.billRepository.save(this.billRepository.create({ restaurant }));
         table.bill = bill;
       }
 
-      const order = this.ordersRepository.create({ people: persons, totalValue: createOrderDto.totalValue, checkouted: false, product: product, status: OrderStatus.EmAndamento, table: table, bill: table.bill, responsible: table.waiter })
+      const order = this.ordersRepository.create({ people: persons, totalValue: createOrderDto.totalValue, checkouted: false, product: product, status: OrderStatus.EmAndamento, table: table, bill: table.bill, responsible: table.waiter, restaurant: restaurant })
 
       ordersCreated.push(await this.ordersRepository.save(order));
     }
     return ordersCreated
   }
 
-  async findAll(): Promise<Order[]> {
-    const orders = await this.ordersRepository.find({ relations: ['table'] });
+  async findAll(restaurantId: number): Promise<Order[]> {
+    const orders = await this.ordersRepository.find({ relations: ['table'], where: { restaurant: { id: restaurantId } } });
     let ordersOutput = [];
     for (const order of orders) {
       const productQuantity = await this.ordersRepository.count({
-        where: { product: order.product, bill: order.bill }
+        where: { product: order.product, bill: order.bill, restaurant: { id: restaurantId }  }
       });
 
       let customers = [];

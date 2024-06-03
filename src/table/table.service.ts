@@ -22,20 +22,20 @@ export class TableService {
     private ordersRepository: Repository<Order>
   ) { }
 
-  async create(createTableDto: CreateTableDto) {
+  async create(restaurantId: number, createTableDto: CreateTableDto) {
 
-    const table = await this.tableRepository.findOneBy({ code: createTableDto.code })
+    const table = await this.tableRepository.findOneBy({ code: createTableDto.code, restaurant: { id: restaurantId } })
     if (table) {
       throw new ValidationException(CodigoMesaJaExistente)
     }
 
-    const tableEntity = await this.tableRepository.create({ code: createTableDto.code })
+    const tableEntity = await this.tableRepository.create({ code: createTableDto.code, restaurant: { id: restaurantId } })
 
     return await this.tableRepository.save(tableEntity)
   }
 
-  async findAll(): Promise<Table[]> {
-    const tables = await this.tableRepository.find({ relations: ['persons', 'waiter'] });
+  async findAll(restaurantId: number): Promise<Table[]> {
+    const tables = await this.tableRepository.find({ where: { restaurant: { id: restaurantId } }, relations: ['persons', 'waiter'] });
     let tablesOutput = [];
     for (const table of tables) {
       const sqlQuery = `
@@ -72,7 +72,7 @@ export class TableService {
         openTime: table.openedAt,
         customers: customers,
         status: table.status,
-        waiter: table.waiter.name
+        waiter: table.waiter?.name
       }
 
       tablesOutput.push({

@@ -4,6 +4,7 @@ export class CreateOrderDto {
     tableId: number;
     productId: number;
     personIds: number[];
+    restaurantId: number;
 }
 
 export enum OrderStatus {

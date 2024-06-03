@@ -4,7 +4,9 @@ export interface CreateProductDto {
     productName: string;
     type: string;
     productPrice: number;
+    productDescription: string;
     productItems: ProductItemsDto[];
+    restaurantId: number;
 }
 
 export interface ProductItemsDto {

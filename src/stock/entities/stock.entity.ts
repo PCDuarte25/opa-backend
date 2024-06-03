@@ -1,5 +1,6 @@
-import { Column, Entity, OneToMany, PrimaryGeneratedColumn, Relation } from "typeorm";
+import { Column, Entity, ManyToOne, OneToMany, PrimaryGeneratedColumn, Relation } from "typeorm";
 import { ProductItem } from "../../database_config/productItems/entity/productItems.entity";
+import { Restaurant } from "../../restaurant/entities/restaurant.entity";
 
 export enum MeasurementUnit {
     UN = 'UN',
@@ -24,6 +25,9 @@ export class Stock {
 
     @OneToMany(() => ProductItem, productItem => productItem.stock)
     productItems?: ProductItem[];
+
+    @ManyToOne(() => Restaurant, (restaurant) => restaurant.stockProducts)
+    restaurant: Restaurant;
 
     @Column()
     type: string;

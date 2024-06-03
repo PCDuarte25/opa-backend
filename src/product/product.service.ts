@@ -4,8 +4,9 @@ import { Product } from './entities/product.entity';
 import { Repository } from 'typeorm';
 import { ProductItem } from '../database_config/productItems/entity/productItems.entity';
 import { StockService } from '../stock/stock.service';
-import { ProdutoIngredientesInvalidos, ProdutoNomeInvalido, ProdutoNomeJaExistente, ProdutoPrecoInvalido } from '../messages/exceptions.messages';
+import { IdRestauranteInexistente, ProdutoIngredientesInvalidos, ProdutoNomeInvalido, ProdutoNomeJaExistente, ProdutoPrecoInvalido } from '../messages/exceptions.messages';
 import { ValidationException } from '../utils/exceptions';
+import { Restaurant } from '../restaurant/entities/restaurant.entity';
 
 @Injectable()
 export class ProductService {
@@ -15,13 +16,14 @@ export class ProductService {
     private productRepository: Repository<Product>,
     @Inject("PRODUCT_ITEM_REPOSITORY")
     private productItemsRepository: Repository<ProductItem>,
+    @Inject('RESTAURANT_REPOSITORY')
+    private restaurantRepository: Repository<Restaurant>,
     private stockService: StockService,
   ) {
   }
 
-  async create(createProductsDto: CreateProductDto[]) {
+  async create(restaurantId: number, createProductsDto: CreateProductDto[]) {
     for (const createProductDto of createProductsDto) {
-      console.log(createProductDto)
       if (!createProductDto.productName) {
         throw new ValidationException(ProdutoNomeInvalido)
       }
@@ -33,13 +35,23 @@ export class ProductService {
         throw new ValidationException(ProdutoIngredientesInvalidos)
       }
 
-      const product = await this.productRepository.findOneBy({ name: createProductDto.productName })
+      const product = await this.productRepository.findOneBy({ name: createProductDto.productName, restaurant: { id: restaurantId } })
       if (product) {
-        throw new ValidationException(ProdutoNomeJaExistente)
+        throw new ValidationException(ProdutoNomeJaExistente);
       }
 
-      const productItemEntities: ProductItem[] = []
-      const productEntity = this.productRepository.create({ name: createProductDto.productName, price: createProductDto.productPrice, type: createProductDto.type })
+      if (!restaurantId) {
+        throw new ValidationException(IdRestauranteInexistente);
+      }
+
+      const productItemEntities: ProductItem[] = [];
+      const restaurant = await this.restaurantRepository.findOne({where: { id: restaurantId }})
+
+      if (!restaurant) {
+        throw new ValidationException('Restaurante nao encontrado');
+      }
+
+      const productEntity = this.productRepository.create({ name: createProductDto.productName, price: createProductDto.productPrice, type: createProductDto.type, restaurant: restaurant, description: createProductDto.productDescription })
       const productCreated = await this.productRepository.save(productEntity)
       for await (const productItem of createProductDto.productItems) {
         const stockProduct = await this.stockService.findOne(productItem.stockProductId)
@@ -51,14 +63,14 @@ export class ProductService {
     return null;
   }
 
-  async findAll(): Promise<Product[]> {
-    const products = await this.productRepository.find();
+  async findAll(restaurantId: number): Promise<Product[]> {
+    const products = await this.productRepository.find({ where: { restaurant: { id: restaurantId } }});
     let productsOutput = [];
     for (const product of products) {
       productsOutput.push({
         id: product.id,
         name: product.name,
-        description: 'Barreto vai implementar', // product.description,
+        description: product.description, 
         price: product.price,
       });
     }

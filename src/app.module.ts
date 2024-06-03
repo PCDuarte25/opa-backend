@@ -14,8 +14,8 @@ import { BillModule } from './bill/bill.module';
 import { RestaurantModule } from './restaurant/restaurant.module';
 @Module({
   imports: [
-    DatabaseModule,
     ConfigModule.forRoot(),
+    DatabaseModule,
     OpaPersonModule,
     EncrypterModule,
     AuthModule,

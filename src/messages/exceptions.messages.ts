@@ -13,3 +13,5 @@ export const ProdutoIngredientesInvalidos = "O produto enviado não possui nenhu
 export const ProdutoNomeJaExistente = "Este nome já está cadastrado."
 
 export const CodigoMesaJaExistente = "Já existe uma mesa com este código."
+
+export const IdRestauranteInexistente = "Insira um id de restaurante."

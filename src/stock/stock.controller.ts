@@ -1,4 +1,4 @@
-import { Controller, Get, Post, Body, Patch, Param, Delete, Query, UseGuards } from '@nestjs/common';
+import { Controller, Get, Post, Body, Patch, Param, Delete, Query, UseGuards, Request } from '@nestjs/common';
 import { StockService } from './stock.service';
 import { CreateStockDto } from './dto/create-stock.dto';
 import { UpdateStockDto } from './dto/update-stock.dto';
@@ -10,13 +10,13 @@ export class StockController {
   constructor(private readonly stockService: StockService) { }
 
   @Post()
-  async create(@Body() createStockDto: CreateStockDto[]) {
-    return await this.stockService.create(createStockDto);
+  async create(@Request() request: number, @Body() createStockDto: CreateStockDto[]) {
+    return await this.stockService.create(request['restaurantId'], createStockDto);
   }
 
   @Get()
-  async findAll(@Query('name') name: string) {
-    return await this.stockService.findAll(name);
+  async findAll(@Request() request, @Query('name') name: string) {
+    return await this.stockService.findAll(request['restaurantId'], name);
   }
 
   @Get(':id')

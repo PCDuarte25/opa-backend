@@ -1,4 +1,4 @@
-import { Controller, Get, Post, Body, Patch, Param, Delete } from '@nestjs/common';
+import { Controller, Get, Post, Body, Patch, Param, Delete, Request } from '@nestjs/common';
 import { BillService } from './bill.service';
 import { CreateBillDto } from './dto/create-bill.dto';
 import { UpdateBillDto } from './dto/update-bill.dto';
@@ -8,13 +8,13 @@ export class BillController {
   constructor(private readonly billService: BillService) {}
 
   @Post()
-  create(@Body() createBillDto: CreateBillDto) {
-    return this.billService.create(createBillDto);
+  create(@Request() request, @Body() createBillDto: CreateBillDto) {
+    return this.billService.create(request['restaurantId'], createBillDto);
   }
 
   @Get()
-  findAll() {
-    return this.billService.findAll();
+  findAll(@Request() request) {
+    return this.billService.findAll(request['restaurantId']);
   }
 
   @Get(':id')
