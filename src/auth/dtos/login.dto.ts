@@ -5,5 +5,7 @@ export type LoginDto = {
 
 export type LoginOutputDto = {
   userId: number;
+  restaurantId: number;
+  ownerRestaurantId: number;
   token: string;
 }

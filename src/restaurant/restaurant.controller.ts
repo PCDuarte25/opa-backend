@@ -1,4 +1,4 @@
-import { Body, Controller, HttpCode, HttpStatus, Post, Response } from '@nestjs/common';
+import { Body, Controller, Get, HttpCode, HttpStatus, Param, Post, Response } from '@nestjs/common';
 import { CreateRestaurantDto } from './dtos/create-restaurant.dto';
 import { RestaurantService } from './restaurant.service';
 
@@ -22,4 +22,10 @@ export class RestaurantController {
       });
     }
   }
+
+  @Get(':id')
+  async findOne(@Param('id') id: string) {
+    return this.restaurantService.findOne(+id);
+  }
+
 }

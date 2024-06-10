@@ -9,6 +9,7 @@ import { Bill } from '../bill/entities/bill.entity';
 import { Person } from '../opa_person/entities/person.entity';
 import { Restaurant } from '../restaurant/entities/restaurant.entity';
 import { ValidationException } from '../utils/exceptions';
+import { OrderPersonDto } from './dto/get-order-person.dto';
 
 @Injectable()
 export class OrderService {
@@ -119,6 +120,31 @@ export class OrderService {
     }
 
     return ordersOutput;
+  }
+
+  async findOneOrderByPerson(restaurantId: number, personId: number): Promise<OrderPersonDto[]> {
+    const orders = await this.ordersRepository.find({ relations: ['table'], where: { restaurant: { id: restaurantId } } });
+    let ordersPersonOutput = [];
+    for (const order of orders) {
+      for (const person of order.people) {
+        if (person.id !== personId) {
+          continue;
+        }
+
+        const productQuantity = await this.ordersRepository.count({
+          where: { product: order.product, bill: order.bill, restaurant: { id: restaurantId }  }
+        });
+
+        ordersPersonOutput.push({
+          qt: productQuantity,
+          name: order.product.name,
+          totalPrice: Number(order.product.price),
+          dividedPrice: order.product.price / order.people.length,
+        })
+      }
+    }
+
+    return ordersPersonOutput;
   }
 
   findOne(id: number) {

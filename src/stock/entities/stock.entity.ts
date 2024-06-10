@@ -30,6 +30,9 @@ export class Stock {
     restaurant: Restaurant;
 
     @Column()
-    type: string;
+    typeName: string;
+
+    @Column({ nullable: false, type: "decimal" })
+    portionSize: number;
 }
 

@@ -3,4 +3,5 @@ export interface PersonAuthData {
     name: string,
     password: string,
     restaurantId: number,
+    ownerRestaurantId: number,
 }

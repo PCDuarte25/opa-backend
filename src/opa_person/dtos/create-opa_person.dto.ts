@@ -17,6 +17,7 @@ export class CreateOpaPersonDto {
   ocuppation!: number;
   restaurantId?: number;
   ownRestaurantId?: number;
+  restaurantCnpj?: string;
 }
 
 export class CreateOpaPersonOutputDto {

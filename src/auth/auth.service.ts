@@ -28,7 +28,12 @@ export class AuthService {
       restaurantId: personAuthData.restaurantId,
     });
 
-    return { userId: personAuthData.id, token: jwtToken };
+    return {
+      userId: personAuthData.id,
+      restaurantId: personAuthData.restaurantId,
+      ownerRestaurantId: personAuthData.ownerRestaurantId,
+      token: jwtToken
+    };
   }
 
 }

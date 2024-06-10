@@ -65,4 +65,9 @@ export class RestaurantService {
       );
     }
   }
+
+  async findOne(id: number) {
+    return this.restaurantRepository.findOne({ where: { id } });
+  }
+
 }
