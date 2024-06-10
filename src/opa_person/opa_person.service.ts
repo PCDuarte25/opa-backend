@@ -55,10 +55,17 @@ export class OpaPersonService {
       if (!restaurant) {
         throw new ValidationException('Restaurante nao encontrado');
       }
-    } 
+    }
      if (createOpaPersonDto.ownRestaurantId) {
       ownRestaurant = await this.restaurantRepository.findOneBy({ id: createOpaPersonDto.ownRestaurantId })
       if (!ownRestaurant) {
+        throw new ValidationException('Restaurante nao encontrado');
+      }
+    }
+
+    if (createOpaPersonDto.restaurantCnpj) {
+      restaurant = await this.restaurantRepository.findOneBy({ cnpj: createOpaPersonDto.restaurantCnpj })
+      if (!restaurant) {
         throw new ValidationException('Restaurante nao encontrado');
       }
     }
@@ -113,7 +120,8 @@ export class OpaPersonService {
         user.id,
         user.password,
         person.name,
-        person.restaurantId
+        person.restaurantId,
+        person.own_restaurant_id AS ownerRestaurantId
       FROM
         person
       INNER JOIN
