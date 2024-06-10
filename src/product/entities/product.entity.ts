@@ -29,9 +29,10 @@ export class Product {
   })
   items: ProductItem[];
 
-  @Column()
+  @Column({ default: 'Comida' })
   type: string;
 
   @ManyToOne(() => Restaurant, (restaurant) => restaurant.products)
   restaurant: Restaurant;
+
 }

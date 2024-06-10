@@ -31,8 +31,9 @@ export class StockService {
         measurementUnit: stockDto.measurementUnit,
         productDescription: stockDto.productDescription,
         stockQuantity: stockDto.stockQuantity,
-        type: stockDto.type,
-        restaurant: restaurant, 
+        restaurant: restaurant,
+        typeName: stockDto.typeName,
+        portionSize: stockDto.portionSize
       }
 
       const stockEntity = this.stockRepository.create(stock)
@@ -68,7 +69,9 @@ export class StockService {
           id: stockItem.id,
           name: stockItem.productDescription,
           qt: stockItem.stockQuantity,
-          un: stockItem.measurementUnit
+          un: stockItem.measurementUnit,
+          typeName: stockItem.typeName,
+          portionSize: stockItem.portionSize
         });
       }
 

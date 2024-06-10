@@ -17,6 +17,11 @@ export class OrderController {
     return this.orderService.findAll(restaurantId);
   }
 
+  @Get(':restaurantId/person/:personId')
+  findOneOrderByPerson(@Param('restaurantId') restaurantId: number, @Param('personId') personId: number) {
+    return this.orderService.findOneOrderByPerson(+restaurantId, +personId);
+  }
+
   @Get(':id')
   findOne(@Param('id') id: string) {
     return this.orderService.findOne(+id);
