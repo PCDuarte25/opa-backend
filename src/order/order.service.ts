@@ -63,6 +63,7 @@ export class OrderService {
   }
 
   async findAll(restaurantId: number): Promise<Order[]> {
+    console.log(restaurantId);
     const orders = await this.ordersRepository.find({ relations: ['table'], where: { restaurant: { id: restaurantId } } });
     let ordersOutput = [];
     for (const order of orders) {

@@ -51,7 +51,13 @@ export class ProductService {
         throw new ValidationException('Restaurante nao encontrado');
       }
 
-      const productEntity = this.productRepository.create({ name: createProductDto.productName, price: createProductDto.productPrice, type: createProductDto.type, restaurant: restaurant, description: createProductDto.productDescription })
+      const productEntity = this.productRepository.create({
+        name: createProductDto.productName,
+        price: createProductDto.productPrice,
+        type: createProductDto.type,
+        restaurant: restaurant,
+        description: createProductDto.productDescription ,
+      })
       const productCreated = await this.productRepository.save(productEntity)
       for await (const productItem of createProductDto.productItems) {
         const stockProduct = await this.stockService.findOne(productItem.stockProductId)
@@ -67,11 +73,21 @@ export class ProductService {
     const products = await this.productRepository.find({ where: { restaurant: { id: restaurantId } }});
     let productsOutput = [];
     for (const product of products) {
+      let productItems = [];
+      for (const productItem of product.items) {
+        productItems.push({
+          ingredientId: productItem.stock.id,
+          portionSize: productItem.quantity,
+          stockQuantity: productItem.stock.stockQuantity,
+        })
+      }
+
       productsOutput.push({
         id: product.id,
         name: product.name,
-        description: product.description, 
+        description: product.description,
         price: product.price,
+        items: productItems,
       });
     }
 

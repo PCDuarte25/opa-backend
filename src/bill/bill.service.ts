@@ -20,10 +20,10 @@ export class BillService {
   async findAll(restaurantId: number) {
     const bills = await this.billRepository.find({
       where: {
+        restaurant: { id: restaurantId },
         orders: {
           status: 1,
-          restaurant: { id: restaurantId },
-        }
+        },
       }, relations: ['orders']
     });
 
@@ -53,15 +53,15 @@ export class BillService {
     return billsOutput;
   }
 
-  findOne(id: number) {
-    return `This action returns a #${id} bill`;
+  findOne(restaurantId: number, billId: number) {
+    return `This action returns a #${restaurantId} bill`;
   }
 
-  update(id: number, updateBillDto: UpdateBillDto) {
-    return `This action updates a #${id} bill`;
+  update(restaurantId: number, billId: number, updateBillDto: UpdateBillDto) {
+    return `This action updates a #${restaurantId} bill`;
   }
 
-  remove(id: number) {
-    return `This action removes a #${id} bill`;
+  remove(restaurantId: number, billId: number) {
+    return `This action removes a #${restaurantId} bill`;
   }
 }
