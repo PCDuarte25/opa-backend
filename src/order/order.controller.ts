@@ -12,9 +12,9 @@ export class OrderController {
     return await this.orderService.create(createOrderDto);
   }
 
-  @Get()
-  findAll(restaurantId: number) {
-    return this.orderService.findAll(restaurantId);
+  @Get(':restaurantId')
+  findAll(@Param('restaurantId') restaurantId: number) {
+    return this.orderService.findAll(+restaurantId);
   }
 
   @Get(':restaurantId/person/:personId')
@@ -22,18 +22,18 @@ export class OrderController {
     return this.orderService.findOneOrderByPerson(+restaurantId, +personId);
   }
 
-  @Get(':id')
-  findOne(@Param('id') id: string) {
-    return this.orderService.findOne(+id);
-  }
+  // @Get(':id')
+  // findOne(@Param('id') id: string) {
+  //   return this.orderService.findOne(+id);
+  // }
 
-  @Patch(':id')
-  update(@Param('id') id: string, @Body() updateOrderDto: UpdateOrderDto) {
-    return this.orderService.update(+id, updateOrderDto);
-  }
+  // @Patch(':id')
+  // update(@Param('id') id: string, @Body() updateOrderDto: UpdateOrderDto) {
+  //   return this.orderService.update(+id, updateOrderDto);
+  // }
 
-  @Delete(':id')
-  remove(@Param('id') id: string) {
-    return this.orderService.remove(+id);
-  }
+  // @Delete(':id')
+  // remove(@Param('id') id: string) {
+  //   return this.orderService.remove(+id);
+  // }
 }

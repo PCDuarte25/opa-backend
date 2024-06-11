@@ -12,23 +12,23 @@ export class BillController {
     return this.billService.create(request['restaurantId'], createBillDto);
   }
 
-  @Get()
-  findAll(@Request() request) {
-    return this.billService.findAll(request['restaurantId']);
+  @Get(':restaurantId')
+  findAll(@Param('restaurantId') restaurantId: number) {
+    return this.billService.findAll(+restaurantId);
   }
 
-  @Get(':id')
-  findOne(@Param('id') id: string) {
-    return this.billService.findOne(+id);
+  @Get(':restaurantId/bills/:billId')
+  findOne(@Param('restaurantId') restaurantId: number, @Param('billId') billId: string) {
+    return this.billService.findOne(+restaurantId, +billId);
   }
 
-  @Patch(':id')
-  update(@Param('id') id: string, @Body() updateBillDto: UpdateBillDto) {
-    return this.billService.update(+id, updateBillDto);
+  @Patch(':restaurantId/bills/:billId')
+  update(@Param('restaurantId') restaurantId: number, @Param('billId') billId: string, @Body() updateBillDto: UpdateBillDto) {
+    return this.billService.update(+restaurantId, +billId, updateBillDto);
   }
 
-  @Delete(':id')
-  remove(@Param('id') id: string) {
-    return this.billService.remove(+id);
+  @Delete(':restaurantId/bills/:billId')
+  remove(@Param('restaurantId') restaurantId: number, @Param('billId') billId: string) {
+    return this.billService.remove(+restaurantId, +billId);
   }
 }
