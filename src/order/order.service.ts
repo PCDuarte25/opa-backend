@@ -139,7 +139,7 @@ export class OrderService {
           qt: productQuantity,
           name: order.product.name,
           totalPrice: Number(order.product.price),
-          dividedPrice: order.product.price / order.people.length,
+          dividedPrice: Number((order.product.price / order.people.length).toFixed(2)),
         })
       }
     }

@@ -14,7 +14,7 @@ export class ProductItem {
     @PrimaryGeneratedColumn()
     id: number;
 
-    @ManyToOne(() => Product, product => product.items)
+    @ManyToOne(() => Product, product => product.items, { onDelete: 'CASCADE'})
     product: Product;
 
     @ManyToOne(() => Stock, stock => stock.productItems, { eager: true })

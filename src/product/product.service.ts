@@ -31,9 +31,9 @@ export class ProductService {
         throw new ValidationException(ProdutoPrecoInvalido)
       }
 
-      if (createProductDto.productItems.length == 0) {
-        throw new ValidationException(ProdutoIngredientesInvalidos)
-      }
+      // if (createProductDto.productItems.length == 0) {
+      //   throw new ValidationException(ProdutoIngredientesInvalidos)
+      // }
 
       const product = await this.productRepository.findOneBy({ name: createProductDto.productName, restaurant: { id: restaurantId } })
       if (product) {
@@ -86,7 +86,8 @@ export class ProductService {
         id: product.id,
         name: product.name,
         description: product.description,
-        price: product.price,
+        price: Number(product.price).toFixed(2),
+        type: product.type,
         items: productItems,
       });
     }
@@ -96,6 +97,17 @@ export class ProductService {
 
   findOne(id: number) {
     return this.productRepository.findOne({ where: { id } });
+  }
+
+  async remove (id: number) {
+    console.log('oieeeeeee');
+    const product = await this.productRepository.findOne({ where: { id } });
+
+    try {
+      await this.productRepository.remove(product);
+    } catch (error) {
+      console.error('Erro ao deletar a entidade:', error);
+    }
   }
 
 }
