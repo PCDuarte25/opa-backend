@@ -23,4 +23,9 @@ export class ProductController {
     return this.productService.findOne(+id);
   }
 
+  @Delete(':id')
+  async remove(@Param('id') id: string) {
+    return this.productService.remove(+id);
+  }
+
 }
